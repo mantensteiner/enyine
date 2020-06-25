@@ -30,6 +30,7 @@ module.exports = function (req, res, handlers) {
     //     [1] RFC-2616, 10.4.6 405 Method Not Allowed
     //     https://tools.ietf.org/html/rfc2616#page-66
     //
+    
     var method = (req.method || '').toLowerCase();
     if (!(method in handlers)) {
         res.set('Allow', Object.keys(handlers).join(', ').toUpperCase());
