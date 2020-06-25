@@ -1,0 +1,9 @@
+id,name,unit.symbol,unit.desc,unit.factor,dataTypeKey
+e15de6e7306b4daea52b62ce24f00000,Mass,kg,SI for mass,1,nr_float
+e15de6e7306b4daea52b62ce24f00000,Mass,g,,1000,nr_float
+e15de6e7306b4daea52b62ce24f00000,Mass,lbs,,0.45359237,nr_float
+e15de6e7306b4daea52b62ce24f00001,Time,s,SI for time,1,nr_float
+e15de6e7306b4daea52b62ce24f00001,Time,h,,3600,nr_float
+e15de6e7306b4daea52b62ce24f00002,Length,m,SI for length,1,nr_float
+e15de6e7306b4daea52b62ce24f00003,Heart Rate,bpm,beats per minute,1,nr_short
+e15de6e7306b4daea52b62ce24f00004,Location,lat_lon,geo point by latitude,longitude,val_geopoint

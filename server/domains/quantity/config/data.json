@@ -1,0 +1,76 @@
+[{
+    "id": "e15de6e7306b4daea52b62ce24f00000",
+    "name": "Mass",
+    "dataTypeKey": "nr_float",
+    "units": [{
+        "symbol": "kg",
+        "desc": "SI for mass",
+        "factor": 1
+    },{
+        "symbol": "g",
+        "desc": "",
+        "factor": 1000
+    },{
+        "symbol": "lbs",
+        "desc": "",
+        "factor": 0.45359237
+    }]
+},
+{
+    "id": "e15de6e7306b4daea52b62ce24f00001",
+    "name": "Time",
+    "dataTypeKey": "nr_float",
+    "units": [{
+        "symbol": "s",
+        "desc": "SI for time",
+        "factor": 1
+    },{
+        "symbol": "h",
+        "desc": "",
+        "factor": 3600
+    }]
+},{
+    "id": "e15de6e7306b4daea52b62ce24f00002",
+    "name": "Length",
+    "dataTypeKey": "nr_float",
+    "units": [{
+        "symbol": "m",
+        "desc": "SI for length",
+        "factor": 1
+    }]
+},{
+    "id": "e15de6e7306b4daea52b62ce24f00003",
+    "name": "Heart Rate",
+    "dataTypeKey": "nr_short",
+    "units": [{
+        "symbol": "bpm",
+        "desc": "beats per minute",
+        "factor": 1
+    }]
+},{
+    "id": "e15de6e7306b4daea52b62ce24f00004",
+    "name": "Location",
+    "dataTypeKey": "val_geopoint",
+    "units": [{
+        "symbol": "lat_lon",
+        "desc": "geo point by latitude",
+        "factor": 1
+    }]
+},{
+    "id": "e15de6e7306b4daea52b62ce24f00005",
+    "name": "Energy",
+    "dataTypeKey": "nr_float",
+    "units": [{
+        "symbol": "kcal",
+        "desc": "kilo calories",
+        "factor": 0.00023900573
+    },{
+        "symbol": "J",
+        "desc": "Joule",
+        "factor": 1
+    },{
+        "symbol": "kJ",
+        "desc": "kilo Joule",
+        "factor": 1000
+    }]
+}]

@@ -1,0 +1,3 @@
+id;name;quantity_id;unit_symbol;
+e15de6e7306b4daea52b62ce24f01000;Heart Rate;e15de6e7306b4daea52b62ce24f00003;bpm
+e15de6e7306b4daea52b62ce24f01001;GPS;e15de6e7306b4daea52b62ce24f00004;lat_lon
