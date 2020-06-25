@@ -1,0 +1,43 @@
+<div class="modal fade" id="manageFilters" role="dialog" aria-hidden="true" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Manage Filters</h4>
+            </div>
+            <div class="modal-body">
+
+                <a ng-show="$ctrl.selectedFilter !== null" class="clickable btn btn-primary btn-sm" ng-click="$ctrl.addNewFilter=!$ctrl.addNewFilter">
+                    <i class="fa fa-plus"></i>
+                    Add Filter
+                    <i ng-show="!$ctrl.addNewFilter" class="fa fa-caret-down"></i>
+                    <i ng-show="$ctrl.addNewFilter" class="fa fa-caret-up"></i>
+                </a>
+                <div ng-show="($ctrl.addNewFilter === true) || ($ctrl.selectedFilter === null)">
+                    <h6>Add filter for current list</h6>
+                    <input type="text" ng-model="$ctrl.newFilterName" />
+                    <a ng-disabled="!$ctrl.newFilterName" class="clickable btn btn-sm btn-primary" ng-click="$ctrl.saveNewFilter()"><i class="fa fa-save"></i></a>
+                    <hr/>
+                </div>
+                <div>
+                    <h6>Select Filter</h6>
+                    <ul ng-repeat="f in $ctrl.filters" class="list-unstyled">
+                        <li>
+                            <a class="btn btn-success btn-sm" ng-click="$ctrl.selectFilter(f.id)"><i class="fa fa-check"></i></a>
+                            <b>{{f.name}}</b>
+                            <span class="pull-right">
+                                <span class="em-warning" ng-show="f == $ctrl.selectedFilter" title="Filter is currently selected">
+                                    <i class="fa fa-exclamation-circle"></i> <i>Selected</i>
+                                </span>
+                                <a class="clickable em-danger" ng-click="$ctrl.deleteFilter(f.id)"><i class="fa fa-times"></i></a>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-ar btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+
+<div class="modal fade" id="editUserModal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Edit Project Member Settings</h4>
+            </div>
+            <div class="modal-body">
+
+                <h5>{{$ctrl.selectedUser.username}}</h5>
+
+                <div class="form-group">
+                    <label>Project Admin</label>
+                    <input type="checkbox" data-ng-model="$ctrl.selectedUser.admin"/>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-ar btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-ar btn-default" data-dismiss="modal" data-ng-click="$ctrl.saveUser()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>   

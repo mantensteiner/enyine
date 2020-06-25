@@ -1,0 +1,72 @@
+<!-- Modal Save Value -->
+<div class="modal fade" id="createValueModal" role="dialog" aria-hidden="true" >
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Add Value</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Value Settings</div>
+                    <div class="panel-body">
+                        <div role="form">
+                            <!-- Number -->
+                            <div class="form-group" ng-if="$ctrl.selectedUnit.dataTypeKey.indexOf('nr_') === 0">
+                                <label>Value
+                                    <a class="clickable" e-step="0.01" editable-number="$ctrl.selectedValue.value[$ctrl.selectedUnit.dataTypeKey]"
+                                        ng-click="$ctrl.formatNumber($ctrl.selectedValue.value[$ctrl.selectedUnit.dataTypeKey])">
+                                        {{$ctrl.selectedValue.value[$ctrl.selectedUnit.dataTypeKey]}}
+                                    </a> [{{$ctrl.selectedUnit.symbol}}]
+                                </label>
+                                <input type="range" step="0.01" ng-if="$ctrl.selectedUnit.dataTypeKey.indexOf('nr_float') === 0" title="Data Type: nr_float"  type="number" placeholder="Set value" ng-model="$ctrl.selectedValue.value.nr_float">
+                                <input type="range" step="0.01" ng-if="$ctrl.selectedUnit.dataTypeKey.indexOf('nr_double') === 0" title="Data Type: nr_double"  type="number" placeholder="Set value" ng-model="$ctrl.selectedValue.value.nr_double">
+                                <input type="range" step="1" ng-if="$ctrl.selectedUnit.dataTypeKey.indexOf('nr_long') === 0" title="Data Type: nr_long"  type="number" placeholder="Set value" ng-model="$ctrl.selectedValue.value.nr_long">
+                                <input type="range" step="1" ng-if="$ctrl.selectedUnit.dataTypeKey.indexOf('nr_integer') === 0" title="Data Type: nr_integer"  type="number" placeholder="Set value" ng-model="$ctrl.selectedValue.value.nr_integer">
+                                <input type="range" step="1" ng-if="$ctrl.selectedUnit.dataTypeKey.indexOf('nr_short') === 0" title="Data Type: nr_short"  type="number" placeholder="Set value" ng-model="$ctrl.selectedValue.value.nr_short">
+                                <input type="range" step="1" ng-if="$ctrl.selectedUnit.dataTypeKey.indexOf('nr_byte') === 0" title="Data Type: nr_byte"  type="number" placeholder="Set value" ng-model="$ctrl.selectedValue.value.nr_byte">
+                            </div>
+
+                            <!-- Other quantity types --> 
+                            <div class="form-group" ng-if="$ctrl.selectedUnit.dataTypeKey.indexOf('nr_') === -1">
+                                <label>Value</label>
+                                <input ng-if="$ctrl.selectedUnit.dataTypeKey.indexOf('val_date') === 0" title="Data Type: val_date"  type="datetime" placeholder="Set value" ng-model="$ctrl.selectedValue.value.val_date">
+                                <input ng-if="$ctrl.selectedUnit.dataTypeKey.indexOf('val_bool') === 0" title="Data Type: val_bool"  type="checkbox" placeholder="Set value" ng-model="$ctrl.selectedValue.value.val_bool">
+                                <input ng-if="$ctrl.selectedUnit.dataTypeKey.indexOf('val_keyword') === 0" title="Data Type: val_keyword" type="text" placeholder="Set value" ng-model="$ctrl.selectedValue.value.val_keyword">
+                                <input ng-if="$ctrl.selectedUnit.dataTypeKey.indexOf('val_ip') === 0" title="Data Type: val_ip" type="text" placeholder="Set value" ng-model="$ctrl.selectedValue.value.val_ip">
+                                <input ng-if="$ctrl.selectedUnit.dataTypeKey.indexOf('val_geopoint') === 0" title="Data Type: val_geopoint" type="text" placeholder="Set value" ng-model="$ctrl.selectedValue.value.val_geopoint">
+                            </div>                            
+
+                            <div class="form-group">
+                                <label>Comment</label>
+                                <textarea  class="form-control" width="100%" ng-model="$ctrl.selectedValue.comment"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label >Item</label>
+                                <ui-select ng-model="$ctrl.selectedItem.selected" theme="bootstrap" style="">
+                                  <ui-select-match placeholder="Pick item...">{{$ctrl.selectedItem.selected.name}}</ui-select-match>
+                                  <ui-select-choices repeat="item in $ctrl.itemNames | propsFilter: {name: $select.search}">
+                                    <div ng-bind-html="item.name | highlight: $select.search"></div>
+                                  </ui-select-choices>
+                                </ui-select>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label>Date</label>
+                                <input type="date"  class="form-control"  id="exampleInput" name="input" ng-model="$ctrl.selectedValue.date"
+                                       placeholder="yyyy-MM-dd" min="2014-01-01" required />
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-ar btn-default" data-dismiss="modal">Close</button>
+                <button type="button"  class="btn btn-ar btn-primary" data-ng-click="$ctrl.createValue()">Add</button>
+            </div>
+        </div>
+    </div>
+</div>

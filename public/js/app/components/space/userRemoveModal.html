@@ -1,0 +1,20 @@
+
+<div class="modal fade" id="removeUserModal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Remove User</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">Really remove User {{$ctrl.selectedUser.username}} from Project {{$ctrl.projectName}}?</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-ar btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-ar btn-danger" data-dismiss="modal" ng-click="$ctrl.removeUser($ctrl.selectedUser)">Remove</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,5 @@
+FROM mantenpanther/enyine-app
+WORKDIR /src/setup
+COPY /mgmt /src/mgmt
+COPY /setup /src/setup
+#RUN bash init_es.sh

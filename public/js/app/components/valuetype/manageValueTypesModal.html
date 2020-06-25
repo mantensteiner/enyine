@@ -1,0 +1,98 @@
+
+    <div class="modal fade" id="manageValueTypesModal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4>Manage Value Types
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            New Value Type
+                        </div>
+                        <div class="panel-body">
+                            <div class="col-sm-3">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" placeholder="Set name" ng-model="$ctrl.newValueType.name">
+                            </div>
+                            </div>
+                            <div class="col-sm-3">
+                            <div class="form-group">
+                                <label>Quantity (Unit)</label>
+                                <ui-select ng-model="$ctrl.newValueType.quantity" theme="bootstrap" style="">
+                                    <ui-select-match placeholder="Pick quantity/unit">{{$select.selected.name}}</ui-select-match>
+                                    <ui-select-choices repeat="at in $ctrl.quantities | propsFilter: {name: $select.search}">
+                                    <div ng-bind-html="at.name | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            </div>          
+                            <div class="col-sm-3">
+                            <div class="form-group">
+                                <label>Comment</label>
+                                <input type="text" placeholder="Set comment" ng-model="$ctrl.newValueType.comment">
+                            </div>
+                            </div>
+
+                             <button class="btn btn-primary pull-right" type="button" 
+                                ng-disabled="!$ctrl.newValueType.name || !$ctrl.newValueType.quantity || $ctrl.moreValueTypesLoading"
+                                data-ng-click="$ctrl.saveValueType()">
+                                <span class="fa fa-save"></span> Save
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            Existing Value Types
+                        </div>
+                        <div class="panel-body">
+                            <loader show="$ctrl.moreValueTypesLoading"></loader>
+
+                            <table class="table table-hover" infinite-scroll="$ctrl.loadMoreValueTypes()"
+                                infinite-scroll-disabled="moreValueTypesLoading" infinite-scroll-distance='0'>
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Comment</th>
+                                    <th>Quantity</th>
+                                    <th>Changed On</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody  data-ng-repeat="vt in $ctrl.valueTypes" ng-class-odd="'default-striping'">
+                                <tr>
+                                    <td>
+                                        <a href="#" editable-text="vt.name" onaftersave="$ctrl.changeValueType(vt)">{{vt.name || 'empty'}}</a> 
+                                    </td>
+                                    <td>
+                                        <a href="#" editable-text="vt.comment" onaftersave="$ctrl.changeValueType(vt)">{{vt.comment || 'empty'}}</a>                                         
+                                    </td>
+                                    <td>
+                                        {{vt.quantity.name}}
+                                    </td>
+                                    <td>
+                                        {{vt.modifiedOn | date:'yyyy-MM-dd'}}
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-danger btn-sm" type="button"
+                                            data-ng-click="$ctrl.deleteValueType(vt)">
+                                            <span class="fa fa-remove"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ar btn-default" data-dismiss="modal">Close</button>
+                 </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,229 @@
+<br/>
+
+<div class="fluid-container" style="padding:0px 5px 0px 5px">
+
+    <loader ng-show="$ctrl.viewLoading()"></loader>
+
+    <div ng-show="!$ctrl.viewLoading()" class="row row-offcanvas row-offcanvas-left animated fadeIn animation-delay-1">
+
+        <div class="col-xs-5 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+            <div style="padding-left: 20px" class="block">
+                <span class="pull-right label label-default" style="margin-top:5px;margin-right:5px">Total: {{$ctrl.itemNames.length}}</span>
+
+                <ul class="nav nav-tabs nav-tabs-ar" id="myTab2">
+                    <li class="active"><a href="/#/space/{{$ctrl.spaceId}}/values" data-toggle="tab" data-target="#tags"><i class="fa fa-tags"></i></a></li>
+                    <li><a href="/#/space/{{$ctrl.spaceId}}/values" data-toggle="tab" data-target="#archive"><i class="fa fa-clock-o"></i></a></li>
+                </ul>
+
+                <values-sidebar 
+                    space-id="$ctrl.spaceId" 
+                    unit-data-type-key="$ctrl.selectedUnit.selected" 
+                    on-set-filter="$ctrl.historyFilterSet({filter:filter})">
+                </values-sidebar>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-9">
+            <div>
+                <span class="visible-xs pull-left" style="margin-right: 5px">
+                    <a href="javascript:void(0);" class="btn btn-primary btn-ar btn-lg" data-toggle="offcanvas">
+                        <i class="fa fa-tags "></i></a>
+                </span>
+
+                <h2 class="section-title no-margin-top">
+
+                    <span class="pull-left em-primary">Values</span>
+
+                    <span class="pull-left" style="width:25%;margin-left:5px">
+                      <ui-select ng-model="$ctrl.selectedItemType.selected" ng-change="$ctrl.unitSelected()">
+                        <ui-select-match placeholder="Pick item type">{{$select.selected.name}}</ui-select-match>
+                        <ui-select-choices repeat="u as u in $ctrl.itemTypes | propsFilter: {name: $select.search}">
+                          <div ng-bind-html="u.name | highlight: $select.search"></div>
+                        </ui-select-choices>
+                      </ui-select>
+                    </span>
+
+                    <span class="pull-left" style="width:25%;margin-left:5px">
+                      <ui-select ng-model="$ctrl.selectedUnit.selected" ng-change="$ctrl.unitSelected()">
+                        <ui-select-match placeholder="Pick value type">{{($select.selected.name + ' [' + $select.selected.symbol + ']')}}</ui-select-match>
+                        <ui-select-choices repeat="u as u in $ctrl.selectedItemType.selected.valueTypes | propsFilter: {name: $select.search}">
+                          <div ng-bind-html="u.name | highlight: $select.search"></div>
+                        </ui-select-choices>
+                      </ui-select>
+                    </span>
+
+                    <span class="clickable" ng-if="($ctrl.selectedUnit.selected && $ctrl.space.units.length > 1)"  title="Clear selected unit"
+                      data-ng-click="$ctrl.clearSelectedUnit()" style="font-size:0.7em;margin-left:5px">
+                        <span class="fa fa-times"></span>
+                    </span>
+                    <span class="btn-group" style="margin-left: 8px;padding-bottom:4px">
+                        <button ng-disabled="!$ctrl.selectedUnit.selected" class="btn btn-default" type="button" data-ng-click="$ctrl.selectValue(null)"
+                                data-toggle="modal" data-target="#createValueModal">
+                            <span class="fa fa-plus"></span> <span class="hidden-xs">Add</span>
+                        </button>
+                        <button ng-disabled="!$ctrl.selectedUnit.selected" class="btn btn-default" type="button" data-ng-click="$ctrl.clearSelectedUnit()">
+                            <span class="fa fa-remove"></span>
+                        </button>
+                    </span>
+                    <!--button class="btn btn-default" type="button" style="margin-left: 5px"
+                            data-toggle="modal" data-target="#notesModal" data-ng-click="loadNotes()">
+                        <span class="fa fa-file-text"></span> Notes
+                    </button-->
+
+                    <space-dropdown space-id="$ctrl.spaceId" space-name="$ctrl.space.name"></space-dropdown>
+
+                </h2>
+            </div>
+
+
+            <div class="alert alert-warning" ng-if="$ctrl.noValueData && !$ctrl.spaceValuesLoading">
+                <h4><i class="fa fa-info"></i>Space Values</h4>
+                <p>You have not entered any values for this space. Please start
+                    <a class="clickable" data-ng-click="$ctrl.selectValue(null)"
+                       data-toggle="modal" data-target="#createValueModal">adding</a> your data now!
+                </p>
+            </div>
+            <div class="row">
+
+                <div class="col-sm-12">
+
+                    <div class="content-box box-default">
+                        <div class="col-sm-8 col-xs-12">
+                            <a data-ng-repeat="thf in $ctrl.valueHistoryFilter" class="pull-right clickable label label-info"
+                               style="margin-top:5px" data-ng-click="$ctrl.removeTimeHistoryFilter(thf)">
+                                <i class="fa fa-clock-o"></i> {{thf.name}}
+                            </a>
+                            <div class="input-group ">
+                                <div class="pull-left hidden-xs">
+                                    <span class="icon-ar icon-ar-circle icon-ar-inverse icon-ar-sm ">
+                                        <i class="fa fa-filter"></i>
+                                    </span>
+
+                                    <span data-ng-hide="$ctrl.itemFilter.length == 0" class="clickable" title="Reset Filters"
+                                          data-ng-click="$ctrl.resetItemFilters()">
+                                        <i class="fa fa-times"></i>
+                                    </span>
+                                </div>
+
+                                <ul data-ng-hide="$ctrl.itemFilter.length == 0" style="list-style-type: none; display:inline">
+                                    <li data-ng-show="$ctrl.itemFilter.length == 0"><span><b>None.</b></span></li>
+
+
+                                    <li style="list-style-type: none; display:inline;margin-right: 5px" data-ng-repeat="tf in $ctrl.itemFilter">
+                                        <a title="Click to remove" class="clickable label label-primary"
+                                           ng-class="{'label-warning': tf.hasDate}"
+                                           data-ng-click="$ctrl.removeItemFilter(tf)">
+                                            #
+                                            <i ng-show="tf.hasDate">
+                                                <i title="Event or Action: Item with Date {{tf.date}}" class="glyphicon glyphicon-flash"></i>
+                                            </i>
+                                            {{tf.name}}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4 col-xs-12">
+                            <form>
+
+                                <input ng-hide="true" type="submit" data-ng-click="$ctrl.execFilter()"/>
+                                <div class="input-group">
+                                    <input type="text" placeholder="Text filter..." class="form-control"
+                                           data-ng-model="$ctrl.textFilter">
+                                    <span class="input-group-btn">
+
+                                    <button class="btn btn-ar btn-primary" type="button" data-ng-click="$ctrl.execFilter()">
+                                      <i ng-if="$ctrl.searchError" class="fa fa-warning em-danger" title="The search term seems to be invalid"></i>
+                                      <i class="fa fa-search no-margin-right"></i>
+                                    </button>
+                                    </span>
+                                </div>
+                            </form>
+                            <span ng-if="$ctrl.searchError" class="em-danger pull-right">The search term seems to be invalid</span>
+
+                        </div>
+                    </div>
+
+                    <hr class="dashed">
+
+                    <span ng-if="$ctrl.selectedUnit.selected" class="pull-right badge badge-royal">Sum: {{$ctrl.valueSum}}{{$ctrl.selectedUnit.unit.symbol}}</span>
+                    <span ng-if="!$ctrl.selectedUnit.selected" class="pull-right label label-warning"><i class="fa fa-warning"></i> No unit selected</span>
+                    <span class="pull-left label label-primary">Total: {{$ctrl.valuesTotal}}</span>
+
+
+                    <table class="table" infinite-scroll="$ctrl.loadMoreValues()" infinite-scroll-disabled="$ctrl.moreValuesLoading" infinite-scroll-distance='0'>
+                        <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th width="25%">Description</th>
+                            <th>Value
+                              <span ng-if="$ctrl.selectedUnit.selected">[{{$ctrl.selectedUnit.selected.symbol}}]</span>
+                            </th>
+                            <th class="hidden-xs">Responsible</th>
+                            <th class="hidden-xs">Modified On</th>
+                            <th class="hidden-xs hidden-sm hidden-md">Items</th>
+                            <th class="hidden-xs"></th>
+                        </tr>
+                        </thead>
+                        <tbody  data-ng-repeat="val in $ctrl.spaceValues" ng-show="!$ctrl.spaceValuesLoading"
+                                class=" table-striped animated fadeIn listAnimation" ng-class-odd="'default-striping'">
+                            <tr data-ng-class="{'alert alert-danger': !val.value}" id="{{val.id}}" tu-drop-target="true" data-dropable="true"
+                                ng-drop="true" ng-drop-success="$ctrl.onDropComplete($data,$event, val)" >
+                                <td>
+                                    <a class="clickable pull-left" data-ng-click="$ctrl.selectValue(val)"
+                                    style="margin-right: 5px" data-toggle="modal" data-target="#editValueModal">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    <a href="#"  editable-date="val.date" onbeforesave="$ctrl.saveValue(val, 'date')">
+                                        {{ (val.date | date:"yyyy-MM-dd") || 'empty' }}
+                                    </a>
+                                </td>
+                                <td title = '{{val.comment}}'>
+                                    <a href="#"  editable-text="val.comment" onbeforesave="$ctrl.saveValue(val, 'comment')">
+                                        {{(val.comment ? val.comment : 'empty') | limitTo : 150}}{{val.comment.length>150 ? '...' : ''}}
+                                    </a>
+
+                                </td>
+                                <td>
+                                    <i ng-show="!val.value" class="fa fa-warning"></i>
+                                    <a href="#" e-step="any" editable-number="val.value[val.valueType.dataTypeKey]" onbeforesave="$ctrl.saveValue(val, 'value')">{{ val.value[val.valueType.dataTypeKey] || 'empty' }}</a>
+                                </td>
+                                <td  class="hidden-xs">
+
+                                    <a onbeforesave="$ctrl.saveValue(val, 'responsible')" href="#" editable-select="val.responsible"
+                                        e-ng-options="u as u.username for u in $ctrl.space.users">
+                                        {{valvalue.responsible ? val.responsible.username : val.createdBy}}
+                                    </a>
+
+
+                                </td>
+                                <td class="hidden-xs">{{val.modifiedOn | date:'dd-MM-yyyy H:mm'}}</td>
+                                <td class="hidden-xs hidden-sm hidden-md">
+                                <span data-ng-repeat="tpc in val.items">
+                                    <div  style="margin-right: 3px"
+                                        class="label label-primary label-sm">{{$ctrl.getItemName(tpc.id)}}</div>
+                                </span>
+                                </td>
+                                <td class="hidden-xs">
+                                    <a class="clickable pull-right" data-ng-click="$ctrl.deleteValue(val.id)">
+                                        <i class="fa fa-times-circle em-danger"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="text-center" ng-show="$ctrl.moreValuesLoading"><img src="/img/loader1.gif" alt=""/></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <create-value-modal space-id="$ctrl.spaceId" selected-unit="$ctrl.selectedUnit.selected" on-save="$ctrl.changedValue()"></create-value-modal>
+    
+    <edit-value-modal space-id="$ctrl.spaceId" value-id="$ctrl.selectedValue.id" on-save="$ctrl.changedValue()"></edit-value-modal>
+
+    <save-item-modal></save-item-modal>
+</div>

@@ -1,0 +1,277 @@
+<div class="tab-pane active" id="general" ng-if="$ctrl.activeTab === 'general'">
+    <form role="form">
+        <div class="col-md-12">
+
+            <!-- Space Info -->
+            <div class="panel panel-default">
+            <div class="panel-heading"><i class="fa fa-edit"></i> Space Info            
+            </div>
+                <div class="panel-body">
+                <div class="form-group">
+                    <span>
+                        <label>Space name</label>
+                    </span>
+                    <input type="text" data-ng-model="$ctrl.space.name"
+                            class="form-control"
+                            placeholder="Enter space name">
+                </div>
+            
+
+                <blockquote class="blockquote-color-bg-primary" ng-show="!$ctrl.editMission">
+                    <p marked="($ctrl.space.missionStatement ? $ctrl.space.missionStatement : '') | emoji"></p>
+                    <footer><cite>{{'The ' +  $ctrl.space.name + ' team'}}</cite> 
+                        <a class="clickable" style="color:black" ng-click="$ctrl.startEditMission()"><i class="fa fa-edit"></i></a>
+                    </footer>
+                </blockquote>
+                
+                <div class="form-group alert alert-warning" ng-show="$ctrl.editMission">
+                    <label>
+                        Mission Statement
+                        <a class="clickable" ng-click="$ctrl.saveMission()"><i class="fa fa-save"></i></a>
+                        <a class="clickable" ng-click="$ctrl.cancelMission()"><i class="fa fa-times"></i></a>
+                    </label>
+                    <input type="text" data-ng-model="$ctrl.space.missionStatement"
+                            class="form-control"
+                            placeholder="What's your mission for this space?">
+                </div>
+
+
+                <div class="form-group">
+                <label>Description</label>
+                <div class="pull-right">
+                    <a data-ng-hide="$ctrl.editDescription" class="clickable" data-ng-click="$ctrl.editDescription = true">
+                        <i class="fa fa-edit"></i>
+                    </a>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+
+                                <div data-ng-show="$ctrl.editDescription">
+                                    <textarea class="form-control" rows="6" data-ng-model="$ctrl.space.description"></textarea>
+                                    <button class="btn btn-sm btn-primary pull-right" style="margin-top:5px"
+                                            data-ng-click="$ctrl.saveDescription()">
+                                        <i class="fa fa-check"></i>
+                                    </button>
+                                </div>
+                                <div data-ng-hide="$ctrl.editDescription" marked="$ctrl.space.description ? $ctrl.space.description : '' | emoji"></div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                <!-- Bookmarklet -->
+                <div class="panel panel-default">
+                <div class="panel-heading"><i class="fa fa-bookmark"></i> Browser Bookmarklet</div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label>Quick-Add External Links to this Space
+                            <a data-placement="bottom" bs-tooltip="'Adding the link from the button ' +
+                            'below to your browser-bookmarks enables you to collect links (URLs) for later referral without typing/copying them manually. ' +
+                            'Using this special bookmark (also known as bookmarklet) on any website in your browser adds the URL of the site as a space topic.'">
+                                Why<i class="fa fa-question"></i>
+                            </a>
+                        </label>
+                        <a class="btn btn-primary pull-right" ng-href="{{$ctrl.bookmarkletScript}}" onclick="return false;"
+                            title="Drag me to your browsers bookmarks or add this link via copy/paste manually">
+
+                            <i class="fa fa-arrows"></i>
+                            {{$ctrl.space.name}}: Add Link
+                        </a>
+                        <div><i>Drag/Drop the button to the your <b>Webbrowser Bookmarks</b> or copy/paste the link from the textbox
+                            <a ng-hide="$ctrl.hideMobileInfo" class="clickable" ng-click="$ctrl.hideMobileInfo=!$ctrl.hideMobileInfo">(show mobile instructions)</a>
+                            <a ng-show="$ctrl.hideMobileInfo" class="clickable" ng-click="$ctrl.hideMobileInfo=!$ctrl.hideMobileInfo">(hide mobile instructions)</a>
+                            .</i></div>
+
+                            <textarea style="width: 100%" msd-elastic
+                                    ng-model="$ctrl.bookmarkletScript">
+                            </textarea>
+
+                        <div ng-show="$ctrl.hideMobileInfo">
+                            <div class="alert alert-warning">
+                                    On some browsers (like <i>Safari</i> on <i>iOS</i>) you must
+                                <ol>
+                                    <li>Create a new bookmark, e.g. from the current page</li>
+                                    <li>'Select all' & 'Copy' the script from the textbox above</li>
+                                    <li>'Edit' that bookmarks settings in the mobile browser</li>
+                                    <li>Replace the bookmark URL by pasting the copied script</li>
+                                    <li>Save the changed bookmark</li>
+                                </ol>
+
+                                This special bookmark then allows you to conveniently add web URLs as Topics for later referral to your space!
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                </div>
+                
+                <button type="button" class="btn btn-ar btn-primary pull-right" data-ng-click="$ctrl.saveSpace()">Save changes</button>
+                
+            </div>
+            </div>
+
+
+            <!-- Status -->
+            <div class="panel panel-default">
+            <div class="panel-heading"><i class="fa fa-compass"></i> Status</div>
+            <div class="panel-body">
+                <a class="btn btn-sm btn-primary pull-right" ng-click="$ctrl.selectStatus()"
+                data-toggle="modal" data-target="#editStatusModal"
+                >
+                <i class="fa fa-plus"></i> Add</a>
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Order</th>
+                        <th>Active</th>
+                        <th>Limit</th>
+                    </tr>
+                    </thead>
+                    <tbody  data-ng-repeat="ps in $ctrl.topicStatus"  ng-class-odd="'default-striping'">
+                    <tr>
+                        <td >
+                        <a class="clickable" ng-click="$ctrl.selectStatus(ps)"
+                            data-toggle="modal" data-target="#editStatusModal">
+                            {{ps.name}}
+                            <i class="fa fa-edit"></i>
+                        </a>
+
+                        </td>
+                        <td >
+                            {{ps.order}}
+                        </td>
+                        <td >
+                            {{ps.active}}
+                        </td>
+                        <td>
+                            {{ps.limit}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            </div>
+            
+            <!-- Priorities -->
+            <div class="panel panel-default">
+            <div class="panel-heading"><i class="fa fa-compass"></i> Priorities</div>
+            <div class="panel-body">
+                <a class="btn btn-sm btn-primary pull-right" ng-click="$ctrl.selectPriority()"
+                data-toggle="modal" data-target="#editPrioritiesModal"
+                >
+                <i class="fa fa-plus"></i> Add</a>
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Order</th>
+                        <th>Active</th>
+                    </tr>
+                    </thead>
+                    <tbody  data-ng-repeat="prio in $ctrl.topicPriorities"  ng-class-odd="'default-striping'">
+                    <tr>
+                        <td >
+                        <a class="clickable" ng-click="$ctrl.selectPriority(prio)"
+                            data-toggle="modal" data-target="#editPrioritiesModal">
+                            {{prio.name}}
+                            <i class="fa fa-edit"></i>
+                        </a>
+
+                        </td>
+                        <td >
+                            {{prio.order}}
+                        </td>
+                        <td >
+                            {{prio.active}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Modal Edit Status -->
+<div class="modal fade" id="editStatusModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Edit Status for Space Topics</h4>
+            </div>
+            <div class="modal-body">
+
+                <h5>{{$ctrl.selectedStatus.name}}</h5>
+
+                <div class="form-group">
+                    <label>Name</label>
+                    <input class="form-control"  type="text" data-ng-model="$ctrl.selectedStatus.name"/>
+                </div>
+                <div class="form-group">
+                    <label>Order</label>
+                    <input class="form-control"  type="number" data-ng-model="$ctrl.selectedStatus.order"/>
+                </div>
+                <div class="form-group">
+                    <label>Active</label>
+                    <input class="form-control"  type="number" data-ng-model="$ctrl.selectedStatus.active"/>
+                </div>
+                <div class="form-group">
+                    <label>Limit</label>
+                    <input class="form-control"  type="number" data-ng-model="$ctrl.selectedStatus.limit"/>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-ar btn-danger pull-left" data-ng-click="$ctrl.deleteStatus()">Delete</button>
+
+                <button type="button" class="btn btn-ar btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-ar btn-primary" data-ng-click="$ctrl.saveStatus()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Edit Priorites -->
+<div class="modal fade" id="editPrioritiesModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Edit Priorities for Space Topics</h4>
+            </div>
+            <div class="modal-body">
+
+                <h5>{{$ctrl.selectedPriority.name}}</h5>
+
+                <div class="form-group">
+                    <label>Name</label>
+                    <input class="form-control"  type="text" data-ng-model="$ctrl.selectedPriority.name"/>
+                </div>
+                <div class="form-group">
+                    <label>Order</label>
+                    <input class="form-control"  type="number" data-ng-model="$ctrl.selectedPriority.order"/>
+                </div>
+                <div class="form-group">
+                    <label>Active</label>
+                    <input class="form-control"  type="number" data-ng-model="$ctrl.selectedPriority.active"/>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-ar btn-danger pull-left" data-ng-click="$ctrl.deletePriority()">Delete</button>
+
+                <button type="button" class="btn btn-ar btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-ar btn-primary" data-ng-click="$ctrl.savePriority()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>

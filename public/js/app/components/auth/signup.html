@@ -1,0 +1,63 @@
+<div class="container">
+    <div class="row">
+
+        <br/>
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <h2 class="section-title no-margin-top"><i></i>Get Started with a Free Account.</h2>
+            <h5>Sign up in 30 seconds. No credit card required.</h5>
+            <div class="panel panel-success-dark animated fadeInDown">
+                <div class="panel-heading">Please fill in your data</div>
+                <div class="panel-body">
+                    <form name="signupForm" role="form" novalidate>
+                        <div class="form-group">
+                            <label for="signup-username">Username<sup>*</sup></label>
+                            <input ng-model="$ctrl.user.username" type="text" class="form-control" id="signup-username" placeholder="Username" tabindex="1" required
+                                   data-placement="right" title="User name" name="username">
+                        </div>
+                        <div class="form-group">
+                            <label for="signup-email">Email<sup>*</sup></label>
+                            <input  ng-model="$ctrl.user.email" type="email" class="form-control" id="signup-email" placeholder="Your Email" tabindex="2" required
+                                    data-placement="right" title="Email address">
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="signup-password">Password<sup>*</sup></label>
+                                    <input ng-model="$ctrl.user.password" type="password" class="form-control" id="signup-password" placeholder="Password" tabindex="3" required
+                                           data-placement="right" title="Password">
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="signup-passwordcheck">Confirm Password<sup>*</sup></label>
+                                    <input ng-model="$ctrl.user.passwordCheck" type="password" class="form-control" id="signup-passwordcheck" placeholder="Password" tabindex="4" required
+                                           data-placement="right" title="Password">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <label class="">
+                                    <input ng-model="$ctrl.termsAccepted" type="checkbox" tabindex="5" /> I agree to the
+                                    <a href="#/terms_of_service" target="_blank">Terms of Service</a> &amp; <a href="#/privacy" target="_blank">Privacy Policy</a>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <button ng-click="$ctrl.submitSignup()" data-ng-disabled="!signupForm.$valid || !$ctrl.termsAccepted || !$ctrl.passwordValid()"
+                                        type="submit" class="btn btn-ar btn-success pull-right">Create My Account <i class="fa fa-play-circle"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <p>
+                Already have an account? &nbsp;
+                <a ui-sref="auth.login" class="">Login to your Account!</a>
+            </p>
+        </div>
+
+    </div>
+</div> <!-- container  -->

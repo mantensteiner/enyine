@@ -1,0 +1,47 @@
+  <div class="col-xs-8 col-sm-3 " >
+      <div ng-controller="TopicDetailSideNavController" >
+        <h4>Navigate Topics
+            <a class="btn btn-xs btn-info" title="Keep topics list open" ng-click="toggleSideNavPin()">
+                <i title="The side navigation is pinned and will be opened automatically" ng-if="isPinned" class="fa fa-thumb-tack"></i>
+                <i title="If you push this button, the navigation will be opened automatically on this page" ng-if="!isPinned" class="glyphicon glyphicon-pushpin"></i>
+                
+            </a> 
+            <br>
+            <small ng-show="query.isCachedQuery" title="{{'Query: ' + query.query}}"> <i class="fa fa-filter"></i> Filter is Active 
+                <a class="btn btn-xs btn-primary" ui-sref="in.project_topics({id:projectId,filterQuery:query.query})"  title="Navigate to full topics list">
+                    <i class="fa fa-reply"></i> Full List
+                </a>
+                <a class="btn btn-xs btn-primary" ng-click="resetCachedQuery()" title="Remove filter and show all topics sorted by latest change date">
+                    <i class="fa fa-remove"></i>
+                </a> 
+            </small>
+        </h4>
+    
+        
+        <div  id="detailSideNav" style="overflow:auto">
+            <table class="table table-hover">
+                 <tbody  data-ng-repeat="t in topics" ng-class="{'default-striping stripe-left-warning': selectedTopic === t}" >
+                     <tr>
+                         <td>
+                           <div class="pull-right">
+                               <span style="color:{{getLabel(t).color}}"><i class="{{getLabel(t).icon}}"></i> {{getLabel(t).name}}</span>
+                           </div>
+                           <a class="clickable" ng-click="selectTopic(t)">{{t.name}}</a>
+                         </td>
+                    </tr>
+                 </tbody>
+            </table>
+            
+            <div class="text-center" ng-show="loadingTopics"><i class="fa fa-spinner fa-spin"></i></div>
+    
+            <div class="text-center">
+            <a class="clickable" ng-click="loadMoreTopics()">
+                <span class="icon-ar icon-ar-sm icon-ar-inverse icon-ar-circle"  style="margin-top:5px">
+                <i class="fa fa-angle-double-down"></i>
+                </span>
+            </a>
+            </div>
+        </div>
+    </div>
+
+</div>

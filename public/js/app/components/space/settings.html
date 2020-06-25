@@ -1,0 +1,112 @@
+<br/>
+
+<div class="container">
+
+    <loader show="$ctrl.viewLoading()"></loader>
+
+    <div ng-show="!$ctrl.viewLoading()" class="row row-offcanvas row-offcanvas-left animated fadeIn animation-delay-1">
+
+        <div class="col-xs-12">
+
+            <div>
+                <h2 class="section-title no-margin-top">
+
+                    {{$ctrl.space.name}} <small>Space Settings</small>
+
+
+                    <div class="pull-right">
+                        <button type="button" class="btn btn-ar btn-danger" data-toggle="modal" data-target="#deleteSpaceModal">Delete</button>
+
+                        <space-dropdown space-id="$ctrl.spaceId" space-name="$ctrl.space.name"></space-dropdown>
+                    </div>
+                </h2>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div>
+                        <div>
+                            <div class="">
+                                <div class="">
+
+                                    <!-- Nav tabs -->
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a href="#general" onclick="return false;" data-toggle="tab" ng-click="$ctrl.switchTabs('general')"><i class="fa fa-gear"></i> General</a></li>
+                                        <li><a href="#activity" onclick="return false;" data-toggle="tab" ng-click="$ctrl.switchTabs('activity')"><i class="fa fa-history"></i> Activity</a></li>
+                                        <li><a href="#users" onclick="return false;" data-toggle="tab" ng-click="$ctrl.switchTabs('users')"><i class="fa fa-users"></i> Users</a></li>
+                                        <li><a href="#github" onclick="return false;"  data-toggle="tab" ng-click="$ctrl.switchTabs('github')"><i class="fa fa-github"></i> Github Integration</a></li>
+                                        <!-- <li><a href="#slack" onclick="return false;" data-toggle="tab"><i class="fa fa-slack" ng-click="$ctrl.switchTabs('slack')"></i> Slack Integration</a></li>-->
+                                    </ul>
+
+
+                                    <div class="tab-content">
+                                        <!--
+                                              General
+                                        -->
+                                        <space-settings-general space-id="$ctrl.spaceId" active-tab="$ctrl.activeTab" space="$ctrl.space"></space-settings-general>
+
+
+                                        <!--
+                                              Activity
+                                        -->
+                                        <space-activities space-id="$ctrl.spaceId" active-tab="$ctrl.activeTab"></space-activities>
+
+                                        <!--
+                                              Users
+                                        -->
+                                        <space-users space-id="$ctrl.spaceId" active-tab="$ctrl.activeTab" users-changed="$ctrl.selectedUserChanged"
+                                            users="$ctrl.space.users" on-user-selected="$ctrl.changedUserSelection(user)">
+                                        </space-users>
+
+                                        <!--
+                                              Github
+                                        -->
+                                        <space-settings-github space-id="$ctrl.spaceId" active-tab="$ctrl.activeTab"></space-settings-github>
+
+                                        <!--
+                                              Slack
+                                        -->
+                                        <space-settings-slack space-id="$ctrl.spaceId" active-tab="$ctrl.activeTab"></space-settings-slack>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!--/row-->
+        </div><!--/span-->
+
+    </div>
+
+    <!-- Modal Delete Space -->
+    <div class="modal fade" id="deleteSpaceModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Delete Space</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">Really delete Space {{$ctrl.space.name}}?</div>
+                        <div class="panel-body">
+                            <p>This operation can not be undone, all data for this space will be lost!</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ar btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-ar btn-danger" data-dismiss="modal" ng-click="$ctrl.deleteSpace($ctrl.space)">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Embed user modal here due to modal markup problems if nested deeper (eg in the user component) --> 
+    <user-edit-modal space-id="$ctrl.spaceId" selected-user="$ctrl.selectedUser" on-changed-user="$ctrl.onUserChanged(user)"></user-edit-modal>
+    <user-remove-modal space-id="$ctrl.spaceId" selected-user="$ctrl.selectedUser" space-name="$ctrl.space.name" on-removed-user="$ctrl.onUserChanged(user)"></user-remove-modal>
+
+</div>

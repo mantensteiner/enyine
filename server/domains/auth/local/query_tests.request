@@ -1,0 +1,21 @@
+POST http://localhost:3000/api/auth/getUserByToken HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer 2u389-4fjio-3-489jf-jwrth
+
+{
+    "token":"45c81ac254d54fbf8925bf15697c1e2f"
+}
+
+POST http://localhost:9400/auth/_search/ HTTP/1.1
+Content-Type: application/json
+
+{"query":{"bool":{"must":{"query_string":
+{"query":"activationToken:45c81ac254d54fbf8925bf15697c1e2f"}},
+"filter":[{"term":{"type":"account"}}]}}}
+
+
+DELETE http://localhost:9400/auth/_doc/e312fa36d0b74cbc91f52d77a62efb69 HTTP/1.1
+Authorization: Bearer 2u389-4fjio-3-489jf-jwrth
+
+POST http://localhost:9400/auth/_search/ HTTP/1.1
+Content-Type: application/json

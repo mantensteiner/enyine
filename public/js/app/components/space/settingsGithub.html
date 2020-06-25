@@ -1,0 +1,65 @@
+
+<div class="tab-pane" id="github" ng-if="$ctrl.activeTab === 'github'">
+    <form role="form">
+        <div class="form-group">
+            <h4>Github Integrations
+                <select ng-options="ghInt.repositoryFullName for ghInt in githubIntegrations" ng-model="currentRepo">
+                </select>
+                <a class="btn btn-sm btn-primary" ng-click="newRepository()">New</a>
+                <a class="btn btn-sm btn-primary" ng-click="saveRepository()">Save</a>
+                <a class="btn btn-sm btn-danger" ng-click="deleteRepository()">Delete</a>
+            </h4>
+            
+            
+            <label>Repository Name</label>
+            <input type="text" data-ng-model="currentRepo.repositoryFullName" class="form-control" />
+            <label>Webhook Secret</label>
+            <input type="password" data-ng-model="currentRepo.repositorySecret" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <h4>Events <small>Trigger actions to following hook events</small></h4>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox"  data-ng-model="currentRepo.eventActivePush" >
+                    Push -> Autocreate values for commits
+                </label>
+            </div>
+            <div ng-if="currentRepo.eventActivePush">
+                <div class="alert" ng-class="{'alert-danger':!currentRepo.eventActivePushTimeUnitId, 'alert-info':currentRepo.eventActivePushTimeUnitId}">
+                <span class="fa fa-warning" ng-if="!currentRepo.eventActivePushTimeUnitId">You must select a unit to enable automatic time tracking.</span>
+                Auto create time-entries with referenced topics by using <b>keywords in commit-comments</b>.
+                <p>
+                    <ul class="list-unstyled">
+                    <li>
+                        <b>Time-Unit</b><br>
+                        Commit-Keyword: <span class="label label-info">#time:TIME_VALUE</span> <br>
+                        Unit:
+                        <select ng-options="unit.id as unit.name for unit in $parent.project.units"         
+                                ng-model="currentRepo.eventActivePushTimeUnitId">
+                        </select>
+                    </li>
+                    <li>
+                        <b>Topic</b><br>
+                        Commit-Keyword: <span class="label label-info">#token:TOKEN_FROM_TOPIC</span>
+                    </li>
+                    </ul>
+                </p>
+                </div>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox"  data-ng-model="currentRepo.eventActiveIssue" >
+                    New Issue -> Autocreate topic
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox"  data-ng-model="currentRepo.eventActiveIssueComment" >
+                    Issue Comment -> Notifications (e.g. Slack)
+                </label>
+            </div>
+
+        </div>
+    </form>
+</div>

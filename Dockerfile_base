@@ -1,0 +1,5 @@
+FROM node:9.10.1
+WORKDIR /src
+COPY . /src
+RUN npm install
+EXPOSE 3001 3000

@@ -1,0 +1,113 @@
+
+<div class="modal fade" id="createItemModal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" ng-hide="$ctrl.newItem.id">New Item</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel" ng-class="{'panel-primary':!$ctrl.newItem.hasDate, 'panel-warning':$ctrl.newItem.hasDate}">
+                    <div class="panel-heading">
+                        <i class="em-warning" ng-show="$ctrl.newItem.hasDate">
+                            <i title="Event or Action: Item with Date" class="icon-ar icon-ar-sm glyphicon glyphicon-flash icon-ar-warning"></i>
+                            Event
+                        </i>
+                        <i>{{$ctrl.newItem.name}}</i>
+                        Item Quick Settings
+                            <span ng-hide="$ctrl.changeMood" data-ng-click="$ctrl.changeMood = true" class="pull-right clickable">
+                                <span title="{{$ctrl.newItem.mood}}" ng-bind-html="($ctrl.newItem.mood ? $ctrl.newItem.mood : ':question:' ) | emoji"></span>
+                                Mood
+                            </span>
+
+                        <p ng-show="$ctrl.changeMood" class="pull-right">
+                            <span title="{{e}}" class="clickable" data-ng-repeat="e in emojis" data-ng-click="setMood(e)" ng-bind-html="(e ? e : '') | emoji"></span>
+                            Change Mood
+                        </p>
+                    </div>
+                    <div class="panel-body">
+                        <form role="form">
+                            <div class="form-group">
+                                <isteven-multi-select
+                                        input-model="$ctrl.filterItemTypesMarkup"
+                                        output-model="$ctrl.selectedItemTypes"
+                                        button-label="color name"
+                                        item-label="color name"
+                                        default-label="Select item type..."
+                                        helper-elements="filter"
+                                        tick-property="ticked"
+                                        selection-mode="single">
+                                </isteven-multi-select>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" class="form-control" placeholder="Enter name" data-ng-model="$ctrl.newItem.name">
+                            </div>
+
+                            <div class="form-group" >
+                                <div ng-click="$ctrl.editDesc = true" class="clickable">
+                                    <label>Comment</label>
+
+                                    <div class="pull-right">
+                                        <a data-ng-hide="$ctrl.editDesc == true" class="clickable" data-ng-click="$ctrl.editDesc = true">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                    </div>
+                                    <div data-ng-hide="$ctrl.editDesc" marked="$ctrl.newItem.comment ? $ctrl.newItem.comment : '' | emoji"></div>
+                                </div>
+
+                                <div data-ng-show="$ctrl.editDesc">
+                                    <textarea class="form-control" rows="6" data-ng-model="$ctrl.newItem.comment"></textarea>
+                                    <button class="btn btn-sm btn-primary pull-right" style="margin-top:5px"
+                                            data-ng-click="$ctrl.editDesc = false">
+                                        <i class="fa fa-check"></i>
+                                    </button>
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-group">
+                                <label>Token</label>
+                                <input type="text" ng-model="$ctrl.newItem.token" class="form-control"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Status</label>
+                                <ui-select ng-model="$ctrl.newItem.status" theme="bootstrap" style="min-width: 300px;">
+                                  <ui-select-match placeholder="Pick status">{{$select.selected.name}}</ui-select-match>
+                                  <ui-select-choices repeat="st in $ctrl.itemStatus | propsFilter: {name: $select.search}">
+                                    <div ng-bind-html="st.name | highlight: $select.search"></div>
+                                  </ui-select-choices>
+                                </ui-select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Event: Item with Date</label> <input type="checkbox" data-ng-model="$ctrl.newItem.hasDate"/>
+                                <input type="date" ng-show="$ctrl.newItem.hasDate" class="form-control" name="dateInput"
+                                       ng-model="$ctrl.newItem.date"
+                                       placeholder="yyyy-MM-dd" min="2014-01-01" required />
+                            </div>
+
+                            <div ng-show="$ctrl.newItem.id" class="form-group">
+                                    <span ng-show="$ctrl.newItem.replies.length > 0">{{$ctrl.newItem.replies.length}} <i class="fa fa-comment"></i></span>
+
+                                <a ng-click="leaveModal('in.item_detail', {spaceId: spaceId, id: $ctrl.newItem.id})"
+                                   class="btn btn-primary pull-right">Detail <i class="fa fa-arrow-right" data-dismiss="modal"></i></a>
+                            </div>
+
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-ar btn-default" data-dismiss="modal">Close</button>
+                <button type="button" ng-disabled="$ctrl.busy" class="btn btn-ar btn-primary" data-ng-click="$ctrl.createItem()">Create</button>
+                <loader show="$ctrl.busy" text="'working'"></loader>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,51 @@
+
+<div class="dropdown" ng-class="{ 'pull-right': $ctrl.xsDisplay===false }">
+    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+            data-toggle="dropdown" title="{{$ctrl.spaceName}}" style="margin-left:5px">
+        <i  class="fa fa-cubes"></i> {{$ctrl.spaceName  | limitTo : spaceNameLimit}}
+        <span class="caret"></span>
+    </button>
+
+
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu2">
+        <li role="presentation" class="dropdown-header">Options</li>
+
+        <li role="presentation"><a class="clickable" role="menuitem"  ng-hide="isActiveState('in.space_settings')"
+                                   tabindex="-1" href="/#/space/{{$ctrl.spaceId}}/settings">
+            <i class="fa fa-cogs"></i> Settings</a>
+        </li>
+        
+        <li role="presentation" ng-hide="isActiveState('in.itemtypes')">
+            <a role="menuitem" tabindex="-1"  href="/#/space/{{$ctrl.spaceId}}/itemtypes">
+                <i class="fa fa-tags"></i> Item Types
+            </a>
+        </li>
+
+        <li role="presentation" class="dropdown-header">Records</li>
+
+        <li role="presentation" ng-hide="isActiveState('in.items')">
+            <a role="menuitem" tabindex="-1"  href="/#/space/{{$ctrl.spaceId}}/items///">
+                <i class="fa fa-align-justify"></i> Items
+            </a>
+        </li>
+
+        <li role="presentation"  ng-hide="isActiveState('in.items_board')">
+            <a role="menuitem" tabindex="-1" href="/#/space/{{$ctrl.spaceId}}/board">
+                <i class="fa fa-columns"></i> Board
+            </a>
+        </li>
+
+        <li role="presentation" ng-hide="isActiveState('in.values')">
+            <a role="menuitem" tabindex="-1"  href="/#/space/{{$ctrl.spaceId}}/values">
+                <i class="fa fa-list-ol"></i> Values
+            </a>
+        </li>
+
+        <li role="presentation">
+            <a role="menuitem" tabindex="-1" href="/#/space/{{$ctrl.spaceId}}/notes/">
+                <i class="fa fa-pencil-square-o"></i> Notes
+            </a>
+        </li>
+    </ul>
+
+</div>

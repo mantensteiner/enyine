@@ -1,0 +1,70 @@
+<div ng-if="$ctrl.activeTab === 'activity'">
+<h4>Topic Activities</h4>
+<div>
+    <form>
+        <div class="input-group">
+            <input type="text" placeholder="Text filter..." class="form-control"
+                data-ng-model="$ctrl.textFilter">
+                <span class="input-group-btn">
+                <button class="btn btn-ar btn-primary" type="button" data-ng-click="$ctrl.execFilter()">
+                    <i class="fa fa-search no-margin-right"></i>
+                </button>
+                </span>
+        </div>
+        <input style="display:inline;visibility: hidden" type="submit" data-ng-click="$ctrl.execFilter()"/>
+    </form>
+</div>
+
+<div class="text-center" ng-show="$ctrl.loadingActions"><i class="fa fa-spinner fa-spin"></i> loading...</div>
+<table class="table" infinite-scroll="$ctrl.loadMoreActions()"
+        infinite-scroll-disabled="$ctrl.moreActionsLoading" infinite-scroll-distance='0'>
+    <thead>
+    <tr>
+        <th>Time</th>
+        <th>Type</th>
+        <th>Action</th>
+        <th>Changes</th>
+        <th class="hidden-xs">User</th>
+        <th class="hidden-xs">Description</th>
+    </tr>
+    </thead>
+    <tbody  data-ng-repeat="a in $ctrl.actions"  ng-class-odd="'default-striping'">
+    <tr>
+        <td>
+            {{a.timestamp | date:'yyyy-MM-dd HH:mm'}}
+        </td>
+        <td >
+            {{a.type}}
+        </td>
+        <td >
+            {{a.action}}
+        </td>
+        <td>
+            <span class="badge">
+                {{a.changedFields.length}}
+            </span>
+            <a class="clickable hidden-xs" ng-click="$ctrl.detailRow=!$ctrl.detailRow">
+                <i class="fa fa-search"></i>
+            </a>
+        </td>
+        <td class="hidden-xs">
+            {{a.user.username}}
+        </td>
+        <td class="hidden-xs">
+            {{a.description}}
+        </td>
+    </tr>
+    <tr ng-show="$ctrl.detailRow === true">
+        <td colspan="6"  class="list-group-sm">
+            <ul ng-repeat="f in a.changedFields" class="list-unstyled">
+                <li class="text-left">
+                    <i><b title="Changed field">{{f}}:</b></i>
+                    <span> {{a.data[a.type][f]}}</span>
+                </li>
+            </ul>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div class="text-center" ng-show="$ctrl.moreActionsLoading"><img src="/img/loader1.gif" alt=""/></div>
+</div>

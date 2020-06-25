@@ -1,0 +1,224 @@
+<br/>
+<div class="col-sm-12">
+
+    <loader show="$ctrl.viewLoading()"></loader>
+
+    <div ng-show="!$ctrl.viewLoading()" class="row row-offcanvas row-offcanvas-left animated fadeIn animation-delay-1">
+
+        <div class="col-xs-12">
+            <div>
+                <h2 class="section-title no-margin-top">
+                    Items
+
+                    <div class="btn-group inline" data-toggle="buttons" >
+                      <a class="btn btn-default" type="button" style="margin-left: 5px"
+                              data-toggle="modal" data-target="#createItemModal" data-ng-click="$ctrl.clearItem()">
+                          <span class="fa fa-plus"></span> Add
+                      </a>
+
+                      <a title="Bulk edit current list" class="btn btn-default"
+                       ui-sref="in.items_bulk_edit({id:$ctrl.spaceId,targetQuery:$ctrl.buildFullItemsQuery(), targetInfo:''})">
+                        <i class="fa fa-tasks"></i> Edit
+                      </a>
+                      
+                      <!-- 
+                          RELATIONS: not yet refactored/implemented
+                      
+                      <a title="Edit relationships" class="btn btn-default"
+                       ui-sref="in.items_relations({id:$ctrl.spaceId,targetQuery:$ctrl.buildFullItemsQuery(), targetInfo:''})">
+                        <i class="fa fa-random"></i> Relations
+                      </a>
+
+                      -->
+                      
+                    </div>
+
+                    <!--button class="btn btn-default" type="button" style="margin-left: 5px"
+                            data-toggle="modal" data-target="#notesModal" data-ng-click="$ctrl.loadNotes()">
+                        <span class="fa fa-file-text"></span> Notes
+                    </button-->
+                    
+                    <space-dropdown space-id="$ctrl.spaceId" space-name="$ctrl.space.name"></space-dropdown>
+                    
+
+                    <div class="btn-group inline" data-toggle="buttons" >
+                        <a class="btn btn-primary" data-toggle="modal" data-target="#manageFilters" ng-click="$ctrl.initFilterModal()" title="Manage Filters">
+                            <i class="fa fa-filter"></i>
+                        </a>
+                        <a class="btn btn-info" ng-click="$ctrl.clearFilters()" title="Reset Filters">
+                            <i class="fa fa-times"></i>
+                        </a>
+
+                    </div>
+
+                    <span ng-show="$ctrl.fullQuery" style="font-size:0.5em"  class="clickable" ng-click="$ctrl.showFilterInfo=!$ctrl.showFilterInfo">
+                      <span style="display:inline" title="{{$ctrl.selectedFilterQuery}}">{{$ctrl.selectedFilter.name ? $ctrl.selectedFilter.name : '(Query Info)'}}
+                      <span>
+                      <i title="Show full filter query"
+                        ng-class="{'fa fa-caret-down':!showFilterInfo, 'fa fa-caret-up':$ctrl.showFilterInfo}" title="{{$ctrl.fullQuery}}">
+                      </i>
+                    </span>
+
+                </h2>
+
+                <div ng-show="$ctrl.showFilterInfo">
+                    <h5>Query <small><span class="label label-default">{{$ctrl.fullQuery}}</span></small> </h5>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-10 col-sm-8">
+                    
+                    <isteven-multi-select
+                            input-model="$ctrl.filterItemTypesMarkup"
+                            output-model="$ctrl.selectedFilterItemTypes"
+                            button-label="color name"
+                            item-label="color name"
+                            tick-property="ticked"
+                            helper-elements="$ctrl.filter"
+                            default-label="Filter by item types..."
+                            on-item-click="$ctrl.filterByItemTypes( data )"
+                            >
+                    </isteven-multi-select>
+
+                </div>
+                <div class="col-xs-2 visible-xs">
+                    <a class="btn btn-default pull-right" ng-click="$ctrl.showFilter=!$ctrl.showFilter"><i class="fa fa-search"></i>
+                        <i ng-show="!$ctrl.showFilter" class="fa fa-caret-down"></i>
+                        <i ng-show="$ctrl.showFilter" class="fa fa-caret-up"></i>
+                    </a>
+                </div>
+                <div class="col-xs-12" ng-show="$ctrl.showFilter" style="margin-top:5px">
+                    <form>
+                        <div class="input-group">
+                            <input type="text" placeholder="Text filter..." class="form-control"
+                                   data-ng-model="$ctrl.textFilter">
+                                    <span class="input-group-btn">
+                                    <button class="btn btn-ar btn-primary" type="button" data-ng-click="$ctrl.execFilter()">
+                                        <i class="fa fa-search no-margin-right"></i>
+                                    </button>
+                                    </span>
+                        </div>
+                        <input style="display:inline;visibility: hidden" type="submit" data-ng-click="$ctrl.execFilter()"/>
+                    </form>
+                </div>
+
+                <div class="hidden-xs col-sm-4">
+                    <form>
+                        <div class="input-group pull-right">
+                          <input type="text" placeholder="Text filter..." class="form-control"
+                               data-ng-model="$ctrl.textFilter">
+                          <span class="input-group-btn">
+                          <button class="btn btn-ar btn-primary" type="button" data-ng-click="$ctrl.execFilter()">
+                              <i class="fa fa-search no-margin-right"></i>
+                          </button>
+                          </span>
+                        </div>
+                        <input style="display:inline;visibility: hidden" type="submit" data-ng-click="$ctrl.execFilter()"/>
+                    </form>
+                </div>                
+            </div>
+
+
+            <div ng-show="!$ctrl.itemsLoading && ($ctrl.displayMode === 'list')" class="row animated fadeIn animation-delay-1">
+                <div class="col-sm-12">
+                    <span class="label label-primary pull-right">Total: {{$ctrl.itemsTotal}}</span>
+                    
+                    <table class="table table-hover" infinite-scroll="$ctrl.loadMoreItems()"
+                           infinite-scroll-disabled="moreItemsLoading" infinite-scroll-distance='0'>
+                        <thead>
+                        <tr>
+                            <th class="hidden-xs">
+                                Event
+                            </th>
+
+                            <th width="10%"  class="hidden-xs">
+                                ItemTypes
+                            </th>
+                            <th class="hidden-xs clickable" ng-click="$ctrl.sort('name.raw', 'asc')">
+                              <i class="fa fa-sort" ng-show="$ctrl.sortBy != 'name.raw'"></i>
+                              <i ng-show="$ctrl.sortBy == 'name.raw'" class="fa" ng-class="{
+                              'fa-sort-desc': ($ctrl.sortDir == 'desc'),
+                              'fa-sort-asc': ($ctrl.sortDir == 'asc')}"></i>
+                                Name
+                            </th>
+                            <!--th class="hidden-xs hidden-sm hidden-md">Comment</th-->
+                            <th class="hidden-xs clickable" ng-click="$ctrl.sort('modifiedOn')">
+                                <i class="fa fa-sort" ng-show="$ctrl.sortBy != 'modifiedOn'"></i>
+                                <i ng-show="$ctrl.sortBy == 'modifiedOn'" class="fa" ng-class="{
+                                'fa-sort-desc': ($ctrl.sortDir == 'desc'),
+                                'fa-sort-asc': ($ctrl.sortDir == 'asc')}"></i>
+                                Changed On
+                            </th>
+                            <th class="hidden-xs">
+                                Status
+                            </th>
+                            <th class="hidden-xs clickable" ng-click="$ctrl.sort('mood', 'asc')">
+                                <i class="fa fa-sort" ng-show="$ctrl.sortBy != 'mood'"></i>
+                                <i ng-show="$ctrl.sortBy == 'mood'" class="fa" ng-class="{
+                                'fa-sort-desc': ($ctrl.sortDir == 'desc'),
+                                'fa-sort-asc': ($ctrl.sortDir == 'asc')}"></i>
+                                Mood
+                            </th>
+                            <th class="visible-xs"></th>
+                        </tr>
+                        </thead>
+                        <tbody  data-ng-repeat="t in $ctrl.items" ng-class-odd="'default-striping'">
+                        <tr>
+                            <td class="hidden-xs">
+                                <span ng-show="::t.hasDate" class="em-warning">
+                                    <i title="Event or Action: Item with Date {{::t.date | date:'yyyy-MM-dd'}}" class="icon-ar glyphicon glyphicon-flash icon-ar-warning"></i>
+                                </span>
+                            </td>
+                            <td class="hidden-xs">
+                                <span style="color:{{$ctrl.getItemType(t.itemTypeId).color}}"><i class="{{$ctrl.getItemType(t.itemTypeId).icon}}"></i> 
+                                    {{$ctrl.getItemType(t.itemTypeId).name}}
+                                </span>
+                            </td>
+                            <td>
+                                <a style="font-size:1.1em" class="clickable" ui-sref="in.item_detail({spaceId: t.spaceId, id: t.id, tab:''})">{{t.name}}</a>
+                            </td>
+                            <!--td class="hidden-xs  hidden-sm hidden-md">
+                                <span data-ng-bind-html="t.comment ? t.comment : '' | emoji"></span>
+                            </td-->
+                            <td class="hidden-xs">
+                                {{t.modifiedOn | date:'yyyy-MM-dd'}}
+                            </td>
+                            <td class="hidden-xs">
+                                {{t.status.name}}
+                            </td>
+                            <td class="hidden-xs">
+                                <span title="Mood: {{::t.mood}}" data-ng-bind-html="t.mood ? t.mood : '' | emoji"></span>
+                            </td>
+                            <td class="visible-xs">
+                                <span ng-show="::t.hasDate" class="em-warning">
+                                    <i title="Event or Action: Item with Date {{::t.date}}" class="glyphicon glyphicon-flash"></i>
+                                </span>
+                                <span style="color:{{$ctrl.getItemType(t.itemTypeId).color}}">
+                                    <i class="{{$ctrl.getItemType(t.itemTypeId).icon}}"></i>
+                                </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="text-center" ng-show="$ctrl.moreItemsLoading"><img src="/img/loader1.gif" alt=""/></div>
+                </div>
+            </div><!--/row-->
+
+        </div><!--/span-->
+
+
+    </div>
+
+    <create-item-modal space-id="$ctrl.spaceId" item-status = "$ctrl.itemStatus" on-save="$ctrl.itemCreated()">
+    </create-item-modal>
+
+    <manage-filters-modal 
+        space-id="$ctrl.spaceId" 
+        lazy-load-filters="$ctrl.filterModalConfig"
+        full-query="$ctrl.fullQuery" 
+        selected-filter-item-type-ids="$ctrl.selectedFilterItemTypeIds" 
+        on-save="$ctrl.filterSaved()">
+    </manage-filters-modal>
+
+</div>

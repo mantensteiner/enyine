@@ -1,0 +1,47 @@
+<!-- Modal Notes -->
+<div class="modal fade" id="notesModal" role="dialog" aria-hidden="true" data-ng-controller="ProjectNotesController">
+    <div class="modal-dialog modal-lg" style="width:98%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" ng-hide="selectedTopic.id">Project Notes</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-1">
+
+                        <ul data-ng-repeat="">
+                            <li></li>
+                        </ul>
+
+                        <div class="pull-right">
+                            <a data-ng-hide="editNote" class="clickable" data-ng-click="editNote = true">
+                                <i class="fa fa-edit" style="font-size: 1.5em"></i>
+                            </a>
+                        </div>
+                        <div class="label label-default">Note 1</div>
+                        <div class="label label-primary">Note 2</div>
+                        <div class="label label-default">Note 3</div>
+                        <div class="label label-default">Note 5</div>
+                    </div>
+                    <div class="col-sm-11">
+                        <div class="panel panel-primary" style="min-height:650px;">
+                            <div data-ng-show="editNote == true">
+                                <textarea class="form-control" style="min-height: 650px" data-ng-model="activeNote"></textarea>
+                                <button class="btn btn-sm btn-primary pull-right" style="margin-top:5px"
+                                        data-ng-click="editNote = false">
+                                    <i class="fa fa-check"></i>
+                                </button>
+                            </div>
+                            <div data-ng-hide="editNote" marked="activeNote ? activeNote : '' | emoji"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-ar btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

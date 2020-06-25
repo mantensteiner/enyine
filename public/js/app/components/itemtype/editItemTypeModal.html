@@ -1,0 +1,204 @@
+
+<div class="modal fade" id="editItemTypeModal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="width:70%" >
+        <div class="modal-content"> 
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" ng-hide="$ctrl.selectedItemType.id">Add Item Type</h4>
+                <h4 class="modal-title" ng-show="$ctrl.selectedItemType.id">Edit Item Type</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <i>{{$ctrl.selectedItemType.name}}</i>
+                        Item Type Quick Settings
+                    </div>
+                    <div class="panel-body">
+                        <form role="form">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" class="form-control" placeholder="Enter name" data-ng-model="$ctrl.selectedItemType.name">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Color</label>
+                                <a class="btn btn-xs btn-white" colorpicker type="button" colorpicker-position="top"
+                                    ng-model="$ctrl.selectedItemType.color"><i class="fa fa-edit"></i></a>
+                                <input type="text" ng-model="$ctrl.selectedItemType.color" class="form-control"
+                                        style="color:{{$ctrl.selectedItemType.color}}"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Icon</label>
+                                <small> <i class="fa fa-info-circle"></i> Use the 'Font Awesome' icon text format. All icons here:
+                                <a target="_blank" href="http://fortawesome.github.io/Font-Awesome/icons/"><i class="fa fa-flag"></i>Font Awesome</a>
+                                </small>
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                    <button class="btn btn-ar btn-default" type="button">
+                                        <i style="color:{{$ctrl.selectedItemType.color}}" class="{{$ctrl.selectedItemType.icon}} no-margin-left"></i>
+                                    </button>
+                                    </span>
+                                    <input class="" placeholder="Please enter icon as text in format 'fa fa-icon-name'" type="text"
+                                            ng-model="$ctrl.selectedItemType.icon" class="form-control" style="width:100%;"/>
+                                </div>
+                            </div>
+                        </form>
+
+                        <section>
+                            <h4 class="section-title no-margin-top">Value Tracking</h4>
+
+                            <div class="well well-sm col-sm-12">
+                                <label>Select <span class="em-royal">Value Type</span> to add or press 'Manage' to create or modify them...</label>
+                                <button class="btn btn-primary btn-xs" type="button" style="margin-left: 5px" 
+                                    data-ng-click="$ctrl.manageValueTypes('editItemTypeModal')">
+                                    <span class="fa fa-edit"></span> Manage
+                                </button>
+                                <div class="col-sm-11">
+                                    <ui-select ng-model="$ctrl.selectedValueType" theme="bootstrap">
+                                        <ui-select-match placeholder="Pick Value Type">{{$select.selected.name}}</ui-select-match>
+                                        <ui-select-choices repeat="vt as vt in $ctrl.valueTypes | propsFilter: {name: $select.search}">
+                                            <div ng-bind-html="vt.name | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <div class="col-sm-1">
+                                    <button class="btn btn-primary" type="button" 
+                                        data-ng-click="$ctrl.addSelectedValueType()">
+                                        <span class="fa fa-plus"></span>
+                                    </button>
+                                </div>
+                            </div>
+                            <h4>Value Types</h4>
+                            <div class="panel panel-info">
+                                <div class="panel-body">
+
+                                    <ul class="list-unstyled">
+                                        <li data-ng-repeat="vt in $ctrl.selectedItemType.valueTypes">
+
+                                            <h6 class="no-margin">Metrics for <a href="#" editable-text="vt.name" onaftersave="$ctrl.changeTypeName(vt)">{{vt.name || 'empty'}}</a> 
+                                                 <button class="btn btn-danger btn-xs" type="button" style="margin-left: 5px" ng-click="$ctrl.removeValueType(vt)">
+                                                    <span class="fa fa-remove"></span>
+                                                </button>
+                                                <button class="btn btn-primary btn-xs" type="button" style="margin-left: 5px" ng-click="$ctrl.addMetric(vt)">
+                                                    <span class="fa fa-plus"></span> Add Metric
+                                                </button>
+                                            </h6>
+
+                                            <div ng-repeat="m in vt.metrics">
+
+                                                <div class="alert alert-border alert-warning col-lg-12" style="margin-top:5px">
+                                                    <div class="col-lg-12">
+                                                        <div class="col-lg-2">
+                                                        <div class="form-group">
+                                                            <label>Name</label>
+                                                            <input type="text" ng-model="m.name">
+                                                        </div>
+                                                        </div>
+                                                        <div class="col-lg-2">
+                                                        <div class="form-group">
+                                                            <label>Unit</label>
+
+                                                            <ui-select ng-model="vt.symbol" theme="bootstrap" style="">
+                                                                <ui-select-match placeholder="Pick unit">{{$select.selected.symbol}}</ui-select-match>
+                                                                <ui-select-choices repeat="u.symbol as u in vt._quantity.units | propsFilter: {symbol: $select.search}">
+                                                                <div ng-bind-html="u.symbol | highlight: $select.search"></div>
+                                                                </ui-select-choices>
+                                                            </ui-select>
+
+                                                        </div>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label>Aggregation Type</label>
+
+                                                            <ui-select ng-model="m.aggType" theme="bootstrap" style="">
+                                                                <ui-select-match placeholder="Pick aggregation">{{$select.selected.name}}</ui-select-match>
+                                                                <ui-select-choices repeat="at as at in $root.aggregationTypes | propsFilter: {name: $select.search}">
+                                                                <div ng-bind-html="at.name | highlight: $select.search"></div>
+                                                                </ui-select-choices>
+                                                            </ui-select>
+
+                                                        </div>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label>Aggregation Timeframe</label>
+                                                            <i class="fa fa-exchange" title="Switch Timeframe or Date-Range"></i>
+
+                                                            <ui-select ng-model="m.timeframe" theme="bootstrap" style="">
+                                                                <ui-select-match placeholder="Pick timeframe">{{$select.selected.name}}</ui-select-match>
+                                                                <ui-select-choices repeat="tf as tf in $root.timeframes | propsFilter: {name: $select.search}">
+                                                                <div ng-bind-html="tf.name | highlight: $select.search"></div>
+                                                                </ui-select-choices>
+                                                            </ui-select>
+
+                                                        </div>
+                                                        </div>
+                                                        <div class="col-lg-1">
+                                                        <div class="form-group">
+                                                            <label>Actions</label>
+                                                            
+                                                            <button class="btn btn-danger btn-xs" type="button" style="margin-left: 5px" ng-click="$ctrl.removeMetric(vt, m)">
+                                                                <span class="fa fa-remove"></span>
+                                                            </button>
+                                                        </div>
+                                                        </div>                                                           
+                                                    </div>
+                                                    <div class="col-lg-12">
+                                                        <div class="col-lg-2">
+                                                        <div class="form-group">
+                                                            <label>Target Value</label>
+                                                            <input ng-if="vt._quantity.dataTypeKey.indexOf('nr_float') === 0" title="Data Type: nr_float"  type="number" placeholder="Set value" ng-model="m.targetValue.nr_float">
+                                                            <input ng-if="vt._quantity.dataTypeKey.indexOf('nr_double') === 0" title="Data Type: nr_double"  type="number" placeholder="Set value" ng-model="m.targetValue.nr_double">
+                                                            <input ng-if="vt._quantity.dataTypeKey.indexOf('nr_long') === 0" title="Data Type: nr_long"  type="number" placeholder="Set value" ng-model="m.targetValue.nr_long">
+                                                            <input ng-if="vt._quantity.dataTypeKey.indexOf('nr_integer') === 0" title="Data Type: nr_integer"  type="number" placeholder="Set value" ng-model="m.targetValue.nr_integer">
+                                                            <input ng-if="vt._quantity.dataTypeKey.indexOf('nr_short') === 0" title="Data Type: nr_short"  type="number" placeholder="Set value" ng-model="m.targetValue.nr_short">
+                                                            <input ng-if="vt._quantity.dataTypeKey.indexOf('nr_byte') === 0" title="Data Type: nr_byte"  type="number" placeholder="Set value" ng-model="m.targetValue.nr_byte">
+                                                            <input ng-if="vt._quantity.dataTypeKey.indexOf('val_date') === 0" title="Data Type: val_date"  type="datetime" placeholder="Set value" ng-model="m.targetValue.val_date">
+                                                            <input ng-if="vt._quantity.dataTypeKey.indexOf('val_bool') === 0" title="Data Type: val_bool"  type="checkbox" placeholder="Set value" ng-model="m.targetValue.val_bool">
+                                                            <input ng-if="vt._quantity.dataTypeKey.indexOf('val_keyword') === 0" title="Data Type: val_keyword" type="text" placeholder="Set value" ng-model="m.targetValue.val_keyword">
+                                                            <input ng-if="vt._quantity.dataTypeKey.indexOf('val_ip') === 0" title="Data Type: val_ip" type="text" placeholder="Set value" ng-model="m.targetValue.val_ip">
+                                                            <input ng-if="vt._quantity.dataTypeKey.indexOf('val_geopoint') === 0" title="Data Type: val_geopoint" type="text" placeholder="Set value" ng-model="m.targetValue.val_geopoint">
+                                                        </div>
+                                                        </div>  
+                                                        <div class="col-lg-2">
+                                                        <div class="form-group">
+                                                            <label>Multiplier</label>                                         
+                                                            <input type="number" placeholder="Set value" ng-model="m.targetValue.nr_mul">                                                    
+                                                        </div>
+                                                        </div>  
+                                                        <div class="col-lg-2">
+                                                        <div class="form-group">
+                                                            <label>Offset</label>
+                                                            <input type="number" placeholder="Set value" ng-model="m.targetValue.nr_off">
+                                                        </div>
+                                                        </div>                                                                                                          
+                                                    </div>
+                                                </div>        
+
+                                            </div>
+
+
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </section>
+
+                    </div>
+                </div>
+
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-ar btn-default" data-dismiss="modal">Close</button>
+                <button type="button" ng-disabled="!$ctrl.selectedItemType.color || !$ctrl.selectedItemType.icon || !$ctrl.selectedItemType.name" ng-hide="$ctrl.selectedItemType.id" class="btn btn-ar btn-primary" data-ng-click="$ctrl.saveItemType()">Add</button>
+                <button type="button" ng-disabled="!$ctrl.selectedItemType.color || !$ctrl.selectedItemType.icon || !$ctrl.selectedItemType.name" ng-show="$ctrl.selectedItemType.id" class="btn btn-ar btn-primary" data-ng-click="$ctrl.saveItemType()">Save</button>
+                <button type="button" ng-show="$ctrl.selectedItemType.id" class="btn btn-ar btn-danger pull-left" data-ng-click="$ctrl.deleteItemType()">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<manage-value-types-modal onSave="reloadValueTypesForItemType()"></manage-value-types-modal>

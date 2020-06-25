@@ -1,0 +1,430 @@
+<br/>
+
+<!--<div ng-class="{container: !$ctrl.showSideNav, 'fluid-container': $ctrl.showSideNav}">-->
+<div class="container">
+    <div class="col-xs-12">
+    <div class="row">
+    <!-- SIDE NAV
+     <div ng-show="$ctrl.showSideNav">
+        <topic-side-nav></topic-side-nav>
+    </div>
+    <div class="visible-xs" ng-if="$ctrl.showSideNav">
+        <ul class="pagination pagination-sm" style="display: inline">           
+            <li ng-class="{'active':$ctrl.showSideNav}"> <a class="clickable" ng-click="$ctrl.toggleSideNav()">
+                <i class="fa fa-align-justify"></i></a> 
+            </li>
+        </ul>
+        <br>
+          <h5>{{item.name}}
+              <small> changed by <b>{{item.modifiedBy}}</b> <span>{{getFromNow(item.modifiedOn)}}</span></small>              
+          </h5> 
+          <b>Description</b>
+          <div data-ng-hide="$ctrl.editComment" marked="$ctrl.item.description ? $ctrl.item.description : '' | emoji"></div>
+          
+          <br>
+          <div><i> <a class="clickable" ng-click="$ctrl.toggleSideNav()"> <i class="fa fa-info-circle"></i> Close</a> side menu for full info</i></div>
+          
+    </div>
+    <div ng-class="{'col-xs-12': !$ctrl.showSideNav, 'hidden-xs col-sm-9': $ctrl.showSideNav}">
+    -->
+    <div ng-class="{'col-xs-12': true}">
+        <div>
+            <h2 class="section-title no-margin-top">
+                <span ng-show="$ctrl.item.hasDate">
+                    <span class="em-warning">
+                        <i title="Event or Action: Item with Date" class="icon-ar glyphicon glyphicon-flash icon-ar-warning"></i>
+                        Event
+                    </span>
+                    Item '{{$ctrl.item.name}}'
+                </span>
+                <span ng-show="!$ctrl.item.hasDate">
+                 Item '{{$ctrl.item.name}}'
+                </span>
+
+                <div class="dropdown pull-right">
+                    <button type="button" class="btn btn-ar btn-danger" data-ng-click="$ctrl.deleteItem()">Delete</button>
+                    <button type="button" class="btn btn-ar btn-primary" data-ng-click="$ctrl.saveItem()">Save</button>
+
+                    <space-dropdown space-id="$ctrl.spaceId" space-name="$ctrl.space.name"></space-dropdown>
+
+                </div>
+                <br/>
+                <small> changed by <b>{{$ctrl.item.modifiedBy}}</b> <span>{{$ctrl.getFromNow(item.modifiedOn)}}</span></small>
+            </h2>
+
+        </div>
+
+
+        <!-- Tab Menu -->
+        <div class="row" style="margin-bottom:5px">
+            <div class="col-xs-12">
+            <ul class="pagination pagination-sm" style="display: inline">    
+                <!--       
+                <li ng-class="{'active':$ctrl.showSideNav}"> <a class="clickable" ng-click="$ctrl.toggleSideNav()">
+                    <i class="fa fa-align-justify"></i></a> 
+                </li>
+                -->
+                <li ng-class="{active:($ctrl.activeTab=='detail')}"><a class="clickable" ng-click="$ctrl.switchTab('detail')">Detail</a></li>
+                <li ng-class="{active:($ctrl.activeTab=='relations')}">
+                  <a class="clickable" ng-click="$ctrl.switchTab('relations')">
+                    Relations
+                  </a>
+                </li>
+                <!-- RESSOURCES PROTOTYPE
+                <li ng-class="{active:(activeTab=='ressources')}"><a class="clickable" ng-click="switchTab('ressources')">
+                  Ressources ({{item.ressources ? item.ressources.length : 0}})</a></li>
+                -->
+                <li ng-repeat="ul in $ctrl.itemType.valueTypes" ng-class="{active:($ctrl.activeTab=='values_'+ul.sourceId)}"> 
+                    <a class="clickable" ng-click="$ctrl.switchTab('values_'+ul.sourceId)">
+                         <i class="{{ul.icon}}" style="color:{{ul.color}}"></i>
+                         {{ul.name}}
+                    </a>
+                </li>
+                <!--li ng-class="{active:(activeTab=='values')}" ng-show="unit !== null">
+                  <a class="clickable" ng-click="switchTab('values')">{{unit.name}} ({{valueSum}}{{unit.symbol}})</a></li-->
+
+
+                <li ng-class="{active:($ctrl.activeTab=='activity')}"><a class="clickable" ng-click="$ctrl.switchTab('activity')">Activity</a></li>
+            </ul>
+                <div style="display: inline" class="pull-right">
+                    <span ng-show="$ctrl.changeMood"><b>Change Mood</b></span>
+            <span ng-hide="$ctrl.changeMood"  data-ng-click="$ctrl.changeMood = true" class=" clickable"><b>Mood</b>
+                <span title="{{$ctrl.item.mood}}" ng-bind-html="($ctrl.item.mood ? $ctrl.item.mood : ':question:' ) | emoji"></span>
+            </span>
+
+            <span ng-show="$ctrl.changeMood">
+                <span title="{{e}}" class="clickable" data-ng-repeat="e in $ctrl.emojis" data-ng-click="$ctrl.setMood(e)" ng-bind-html="(e ? e : '') | emoji"></span>
+            </span>
+
+                </div>
+            </div>
+
+        </div>
+
+
+
+        <!--
+              Detail
+        -->
+        <div ng-show="$ctrl.activeTab === 'detail'">
+
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="row">
+              <div class="col-sm-12">
+                <label>Item Type</label>
+                <span style="color:{{$ctrl.itemType.color}}"><i class="{{$ctrl.itemType.icon}}"></i> 
+                    {{$ctrl.getItemType(t.itemTypeId).name}}
+                </span>
+              </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12">
+
+                  <div class="form-group">
+                      <label>Name</label>
+                      <input type="text" class="form-control" placeholder="Enter name" data-ng-model="$ctrl.item.name">
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                      <label>Status</label>
+                      <ui-select ng-model="$ctrl.item.status" theme="bootstrap">
+                        <ui-select-match placeholder="Pick status...">{{$select.selected.name}}</ui-select-match>
+                        <ui-select-choices repeat="st in $ctrl.itemStatus | propsFilter: {name: $select.search}">
+                          <div ng-bind-html="st.name | highlight: $select.search"></div>
+                        </ui-select-choices>
+                      </ui-select>
+                  </div>
+                </div>
+                
+                <div class="col-sm-6">
+                  <div class="form-group">
+                      <label>Priority</label>
+                      <ui-select ng-model="$ctrl.item.priority" theme="bootstrap">
+                        <ui-select-match placeholder="Pick priority...">{{$select.selected.name}}</ui-select-match>
+                        <ui-select-choices repeat="prio in $ctrl.itemPriorities | propsFilter: {name: $select.search}">
+                          <div ng-bind-html="prio.name | highlight: $select.search"></div>
+                        </ui-select-choices>
+                      </ui-select>
+                  </div>
+                </div>
+
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label>Owner</label>
+                    <ui-select ng-model="$ctrl.item.owner" theme="bootstrap">
+                      <ui-select-match placeholder="Pick user...">{{$select.selected.username}}</ui-select-match>
+                      <ui-select-choices repeat="usr in $ctrl.space.users | propsFilter: {username: $select.search}">
+                        <div ng-bind-html="usr.username | highlight: $select.search"></div>
+                      </ui-select-choices>
+                    </ui-select>
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+              <div class="col-sm-6">
+                  <div class="form-group">
+                      <label><b>Event</b>: Item with Date</label> <input type="checkbox" data-ng-model="$ctrl.item.hasDate"/>
+                      <input type="date" ng-show="$ctrl.item.hasDate" class="form-control" name="dateInput"
+                             ng-model="$ctrl.item.date"
+                             placeholder="yyyy-MM-dd" />
+                  </div>
+              </div>
+              <div class="col-sm-6">
+                <!-- PROTOTYPE
+                  <div class="form-group">
+                      <label>Tags</label>
+
+                      <tags-input ng-model="item.tags" display-property="name"
+                                  on-tag-added="tagAdded($tag)"
+                                  on-tag-removed="tagRemoved($tag)">
+                          <auto-complete source="loadTags($query)"></auto-complete>
+                      </tags-input>
+
+                  </div>
+                  -->
+              </div>
+          </div>
+
+          <div class="form-group">
+              <label>Description</label>
+               <div class="pull-right">
+                   <a data-ng-hide="$ctrl.editComment" class="clickable" data-ng-click="$ctrl.setEditComment(true)">
+                       <i class="fa fa-edit"></i>
+                   </a>
+               </div>
+
+              <div class="row">
+                  <div class="col-sm-12">
+                      <div class="panel panel-default">
+                          <div class="panel-body">
+
+                              <div data-ng-show="$ctrl.editComment">
+                                  <textarea class="form-control" rows="6" data-ng-model="$ctrl.item.description"></textarea>
+                                  <button class="btn btn-sm btn-primary pull-right" style="margin-top:5px"
+                                          data-ng-click="$ctrl.setEditComment(false)">
+                                      <i class="fa fa-check"></i>
+                                   </button>
+                              </div>
+                              <div data-ng-hide="editComment" marked="($ctrl.item.description ? $ctrl.item.description : ':question:') | emoji"></div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="col-sm-12">
+                  <span class="pull-right">Created by {{$ctrl.item.createdBy ? $ctrl.item.createdBy : '-'}}, on {{$ctrl.item.createdOn | date : 'yyyy-MM-dd HH:mm'}}</span>
+              </div>
+
+              <div class="col-sm-12 ">
+                  <h3>Comments</h3>
+                <ul class="timeline-2">
+                  <li class="animated fadeIn listAnimation" data-ng-repeat="r in $ctrl.messages">
+                      <time class="timeline-time" datetime="">
+                          <div class="inline">
+                              <img ng-src="/api/user/getAvatar/noid?username={{r.createdBy}}" height="50px" alt=""/>
+                              <div class="pull-right">{{r.date | date: 'yyyy-MM-dd HH:ss'}}</div>
+                          </div>
+                      </time>
+                      <i class="timeline-2-point"></i>
+                      <div class="panel panel-default">
+
+                          <div class="panel-heading">
+                              <b> {{r.modifiedBy}}</b> <span>{{$ctrl.getFromNow(r.modifiedOn)}}</span>
+                              <div class="pull-right">
+                                  <a class="clickable" data-ng-click="$ctrl.deleteReply(r.id)"><i class="fa fa-times pull-right"></i></a>
+                                  <a data-ng-hide="r.editComment" class="clickable" data-ng-click="r.editComment = !r.editComment">
+                                      <i class="fa fa-edit pull-right"></i>
+                                  </a>
+                              </div>
+                          </div>
+                          <div class="panel-body">
+                              <div data-ng-show="r.editComment">
+                                  <textarea class="form-control" rows="6" data-ng-model="r.content"></textarea>
+                                  <button class="btn btn-sm btn-primary pull-right" style="margin-top:5px" 
+                                    data-ng-click = "$ctrl.saveReply(r.content, r.id);r.editComment = !r.editComment">
+                                      <i class="fa fa-check"></i>
+                                  </button>
+                              </div>
+                              <p> <div data-ng-hide="r.editComment"  marked="r.content ? r.content : ''  | emoji"></div></p>
+                          </div>
+                      </div>
+                  </li>
+
+                </ul>
+              </div>
+
+              <div class="col-sm-12">
+                  <div class="panel panel-default">
+                      <div class="panel-heading">
+                          <b>Write new comment</b>
+                      </div>
+                      <div class="panel-body">
+                          <textarea placeholder="Leave a comment..." class="form-control" rows="3" data-ng-model="$ctrl.item.reply"></textarea>
+                          <br/>
+                          <button class="btn btn-primary pull-right" data-ng-click="$ctrl.saveReply($ctrl.item.reply)">Save</button>
+                      </div>
+                  </div>
+              </div>
+
+          </div>
+        </div>
+
+        <!--
+                Ressources PROTOTYPE
+        -->
+        <!--
+        <div ng-show="activeTab === 'ressources'">
+          <h4 ng-hide="inlineEdit" >Ressources
+            <a class="clickable btn btn-xs btn-default" ng-click="selectRessource(null)" data-toggle="modal" data-target="#saveRessourceModal">
+              <i class="fa fa-plus"></i>
+            </a>
+          </h4>
+
+          <div class="row">
+            <div class="col-sm-12">
+              <table ng-hide="inlineEdit" class="table" infinite-scroll="loadMoreTimes()" infinite-scroll-disabled="moreTimesLoading" infinite-scroll-distance='0'>
+                  <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Url</th>
+                    <th>Embedded</th>
+                    <th width="10%">Modified On</th>
+                    <th width="10%">Edit</th>
+                  </tr>
+                  </thead>
+                  <tbody  data-ng-repeat="tr in item.ressources"
+                          class=" table-striped animated fadeIn listAnimation" ng-class-odd="'default-striping'">
+                  <tr>
+                      <td>
+                        {{tr.name}}
+                      </td>
+                      <td>
+                       <a ng-href="{{tr.link}}" target="_blank">{{tr.link}}</a>
+                      </td>
+                      <td>
+                        <a ng-show="tr.embed" class="clickable btn btn-xs btn-default" ng-click="selectRessource(tr);"
+                          data-toggle="modal" data-target="#viewEmbeddedRessource">
+                          <i class="fa fa-eye"></i> View
+                        </a>
+                      </td>
+                      <td>
+                        {{tr.modifiedOn | date:'yyyy-MM-dd HH:mm'}}
+                      </td>
+                      <td>
+                        <a class="clickable btn btn-xs btn-default" ng-click="selectRessource(tr);"
+                          data-toggle="modal" data-target="#saveRessourceModal">
+                          <i class="fa fa-edit"></i>
+                        </a>
+                      </td>
+                  </tr>
+                  </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        -->
+
+        <!-- 
+                Relations
+        --> 
+        <item-detail-relations-tab active-tab="$ctrl.activeTab" space-id="$ctrl.spaceId" item="$ctrl.item"></item-detail-relations-tab>
+
+        <!--
+                Values
+        -->
+        <div ng-repeat="ul in $ctrl.valueTypes">
+            <item-detail-values-tab value-type="ul" item-type="ctrl.item.itemType" active-tab="$ctrl.activeTab" space-id="$ctrl.spaceId" item="$ctrl.item"></item-detail-values-tab>
+        </div>
+
+        <!--
+                Activities
+        -->
+        <item-detail-activity-tab active-tab="$ctrl.activeTab" space-id="$ctrl.spaceId" item="$ctrl.item"></item-detail-activity-tab>
+
+
+    </div><!--/span-->
+
+    </div>
+
+    </div>
+
+    <!-- Modal Save Ressource -->
+    <div class="modal fade" id="saveRessourceModal" role="dialog" aria-hidden="true" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Save Ressource</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">Ressource Settings</div>
+                        <div class="panel-body">
+                            <div role="form">
+                                <div class="form-group">
+                                    <label>Name</label>
+                                    <input class="form-control" type="text" data-ng-model="selectedRessource.name" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Url</label>
+                                    <input class="form-control" type="text" data-ng-model="selectedRessource.link" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Embed</label>
+                                    <textarea class="form-control" data-ng-model="selectedRessource.embed"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-6">
+                                        <label>Modified On</label>
+                                        <span>{{selectedRessource.modifiedOn | date:'yyyy-MM-dd HH:mm'}}</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ar btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-ar btn-primary" data-ng-click="saveRessource()" data-dismiss="modal">Save</button>
+                    <button type="button" class="btn btn-ar btn-danger pull-left" data-dismiss="modal"
+                            data-ng-click="deleteRessource(selectedRessource)">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal View Embedded Ressource -->
+    <div class="modal fade" id="viewEmbeddedRessource" role="dialog" aria-hidden="true" >
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"  ng-click="selectRessource(null);" aria-hidden="true">×</button>
+                    <h4 class="modal-title">View Ressource
+                    <small ng-show="selectedRessourceUrl">
+                        <a ng-href="{{selectedRessourceUrl}}" target="_blank">{{selectedRessource.name}} <i class="fa fa-external-link"></i></a>
+                    </small>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                <div style="height:600px" ng-bind-html="selectedRessourceEmbed"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

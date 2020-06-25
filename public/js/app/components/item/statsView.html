@@ -1,0 +1,39 @@
+
+<div class="btn-group pull-right">
+    <a class="btn btn-sm btn-default" ng-class="{active:$ctrl.showTargetBars}" ng-click="$ctrl.toggleTargetBars()" title="Show target values">
+    <i class="fa fa-crosshairs"></i>
+    </a>
+    <a class="btn btn-sm btn-default" data-toggle="modal" data-target="#changeChartSettingsModal">
+    <i class="fa fa-wrench"></i>
+    </a>
+    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+        <i class="fa fa-bar-chart"></i> <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+    <li role="presentation" ng-click="$ctrl.chartType=$ctrl.CHART_TYPE_HISTORY"><a class="clickable"><i class="fa fa-history"></i> History-Chart</a></li>
+    <!--
+    <li role="presentation" ng-click="$ctrl.chartType=$ctrl.CHART_TYPE_USER"><a class="clickable"><i class="fa fa-user"></i> Users-Chart</a></li>
+    <li  role="presentation"  class="divider"></li>
+    <li role="presentation" ng-click="$ctrl.toggleChartType()"><a class="clickable"><i class="fa fa-toggle-off"></i>
+        To Chart-Type '{{$ctrl.chartType=='multiBarChart' ? 'SingleBar' : 'MultiBar'}}'
+        </a>
+    </li>
+    <li  role="presentation"  class="divider"></li>
+    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Daily Calories</a></li>
+    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Week Average</a></li>
+    -->
+    </ul>
+</div>
+
+<br>
+
+<!--linechart data="chartData" options="chartOptions" mode="" width="" height=""></linechart-->
+
+<!-- History chart -->
+<stats-history-chart ng-if="$ctrl.chartType === $ctrl.CHART_TYPE_HISTORY" space-id="$ctrl.spaceId" item-id="$ctrl.itemId" value-type="$ctrl.valueType">
+</stats-history-chart>
+
+<!-- User chart --> 
+<stats-user-chart ng-if="$ctrl.chartType === $ctrl.CHART_TYPE_USER" space-id="$ctrl.spaceId" item-id="$ctrl.itemId" value-type="$ctrl.valueType">
+</stats-user-chart>
+

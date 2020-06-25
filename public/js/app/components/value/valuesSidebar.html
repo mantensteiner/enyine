@@ -1,0 +1,114 @@
+<div class="tab-content">
+
+    <div class="tab-pane active" id="tags">
+        <h3 class="post-title">Items
+
+            <a class="btn btn-default btn-sm" ng-click="$ctrl.itemTypeFilterActive=!$ctrl.itemTypeFilterActive">
+                <i class="fa fa-filter"></i>
+                <i ng-show="$ctrl.itemTypeFilterActive" class="fa fa-caret-up"></i>
+                <i ng-show="!$ctrl.itemTypeFilterActive" class="fa fa-caret-down"></i>
+            </a>
+            <a><i class="fa fa-search clickable pull-right" ng-click="$ctrl.showItemSearch = !$ctrl.showItemSearch"></i></a>
+        </h3>
+
+        <div class="alert alert-info" ng-show="$ctrl.itemTypeFilterActive || $ctrl.showItemSearch">
+            <div ng-if="$ctrl.itemTypeFilterActive" style="margin-bottom: 5px">
+                <isteven-multi-select
+                        input-model="$ctrl.itemTypesMarkup"
+                        output-model="$ctrl.selectedFilterItemTypes"
+                        button-label="color name"
+                        item-label="color name"
+                        tick-property="ticked"
+                        helper-elements="$ctrl.filter"
+                        max-labels="1"
+                        default-label="Filter by labels"
+                        on-item-click="$ctrl.filterByItemTypes( data )"
+                        >
+                </isteven-multi-select>
+            </div>
+
+            <div ng-show="$ctrl.showItemSearch" class="input-group">
+                <input type="text" placeholder="Text filter..." class="form-control"
+                        ng-enter="$ctrl.filterItems()"
+                        data-ng-model="$ctrl.textFilter">
+                        <span class="input-group-btn">
+                        <button class="btn btn-ar btn-default" type="button"
+                                ng-click="$ctrl.textFilter = '';$ctrl.showItemSearch = false;$ctrl.filterItems()">
+                            <i class="fa fa-times no-margin-right"></i>
+                        </button>
+                        </span>
+            </div>
+        </div>
+
+        <div class="tags-cloud" data-ng-repeat="item in $ctrl.items">
+
+            <a id="{{item.id}}" class="tag grab" style="width: 100%;" tu-draggable="true"  ng-class="{'em-warning-inverse':item.hasDate}">
+
+                <i ng-show="item.hasDate" >
+                    <i title="Event or Action: Item with Date {{item.date}}" class="em-danger glyphicon glyphicon-flash"></i>
+                </i>
+
+                <div class="clickable" style="width: 75%;display: inline-block" data-ng-click="$ctrl.filterItem(item)">
+                    <span style="margin-left:5px">{{item.name}}</span>
+                </div>
+
+                <ul class="pull-right list-unstyled" ng-repeat="lId in item.itemTypes">
+                    <li style="color:{{getItemType(lId).color}}"><i title="{{getItemType(lId).name}}" class="{{getItemType(lId).icon}}"></i></li>
+                </ul>
+
+                <span class="clickable pull-right" data-ng-click="$ctrl.goToItem(item)">
+                    <span title="Mood: {{item.mood}}" data-ng-bind-html="item.mood ? item.mood : '' | emoji"></span>
+                    <i class="fa fa-arrow-right"></i>
+                </span>
+
+
+                <!--div ng-show="!xsDisplay"
+                        ng-drag="true" ng-drag-data="t" title="Drag & drop item over time in table"
+                        onDragComplete="onDragComplete($data,$event)"
+                        class="pull-right em-warning grab"><i class="fa fa-square" style="font-size:1.3em"></i>
+                    <span data-ng-show="dragging">{{item.name}}</span>
+                </div-->
+
+            </a>
+        </div>
+        <div class="text-center">
+        <a class="clickable" ng-click="$ctrl.previousItemPage()"><i class="fa fa-arrow-left"></i></a>
+        <span>Page {{skip+1}}</span>
+        <a class="clickable" ng-click="$ctrl.nextItemPage()"><i class="fa fa-arrow-right"></i></a>
+        </div>
+
+    </div>
+
+    <div class="tab-pane" id="archive">
+        <h3 class="post-title no-margin-top">History</h3>
+        Total: <i>{{$ctrl.valuesHistory.totalValueSum}}h</i>
+        <ul class="simple" data-ng-repeat="year in $ctrl.valuesHistory"> <!-- YEARS -->
+            <li>
+                <a class="clickable" data-ng-click="$ctrl.setTimeFilter('year', year.date)">
+                {{year.date._d | date:'yyyy'}} ({{year.time_count}}<span data-ng-show="year.time_sum">, <i>{{$ctrl.roundFixed2(year.time_sum)}}h</i></span>)
+                </a>
+                <i class="pull-right clickable fa fa-chevron-down" data-ng-click="$ctrl.getValuesHistory('month', year.date)"></i>
+
+                <ul data-ng-show="year.items.length > 0" data-ng-repeat="month in year.items"> <!-- MONTHS -->
+                    <li>
+                        <a class="clickable" data-ng-click="$ctrl.setTimeFilter('month', month.date)">
+                            {{month.date._d | date:'MM'}} ({{month.time_count}}<span data-ng-show="month.time_sum">, <i>{{$ctrl.roundFixed2(month.time_sum)}}h</i></span>)
+                        </a>
+                        <i class="pull-right clickable fa fa-chevron-down" data-ng-click="$ctrl.getValuesHistory('day', month.date)"></i>
+
+                        <ul data-ng-show="month.items.length > 0" data-ng-repeat="day in month.items"> <!-- DAYS -->
+                            <li>
+                                <a class="clickable"  data-ng-click="$ctrl.setTimeFilter('day', day.date)">
+                                    {{day.date._d | date:'dd'}} ({{day.time_count}})
+                                </a>
+                            </li>
+                        </ul>
+
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+    </div>
+
+</div> <!-- tab-content -->

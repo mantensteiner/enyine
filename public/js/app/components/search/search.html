@@ -1,0 +1,142 @@
+<br/>
+
+<div class="container">
+
+    <loader ng-show="$ctrl.loading"></loader>
+
+    <div class="row animated fadeIn animation-delay-1">
+            <div class="col-xs-12">
+
+            <form ng-submit="$ctrl.search()">
+                <input ng-hide="true" type="submit"/>
+                <div class="input-group">
+                    <input type="text" placeholder="Search in your spaces..." class="form-control"
+                           ng-model="$ctrl.term">
+                            <span class="input-group-btn">
+                            <button class="btn btn-ar btn-primary" type="submit">
+                                <i class="fa fa-search no-margin-right"></i>
+                            </button>
+                            </span>
+                </div>
+            </form>
+
+                <div ng-show="$ctrl.searchResults.length == 0" class="well">No results found for search term '{{::$ctrl.term}}'</div>
+                   
+               <hr class="dashed">
+
+                <ul class="list-group">
+                    <li ng-repeat="sr in $ctrl.searchResults" class="list-group-item">
+                        <div ng-if="sr.type==='space'">
+                            <h5 style="color:black">
+                               
+                                <span><i class="fa fa-cubes"></i> Space</span>
+                                <small class="pull-right"> 
+                                    changed by <b>{{sr.modifiedBy}}</b> <span>{{$ctrl.getFromNow(sr.modifiedOn)}}.</span>
+                                </small>
+                            </h5>
+                            <div>
+                                 <a ui-sref="in.space_settings({id:sr.spaceId})">
+                                     <b>{{sr.name}}</b>
+                                 </a>
+                                 <small>
+                                     The Space has {{sr.users.length}} members.
+                                </small>
+                            </div>
+                            
+                        </div>
+                        <div ng-if="sr.type==='note'">
+                            <h5 style="color:black">
+                                <span><i class="fa fa-edit"></i> Note</span>
+                                <small class="pull-right"> 
+                                    changed by <b>{{sr.modifiedBy}}</b> <span>{{$ctrl.getFromNow(sr.modifiedOn)}}.</span>
+                                </small>
+                                <br>
+                                <small class="pull-right"> 
+                                    <span class="badge badge-primary"><i class="fa fa-cubes"></i> {{$ctrl.getSpaceName(sr.spaceId)}}</span>
+                                </small>
+                            </h5>
+                            <div>
+                                <a ui-sref="in.notes({spaceId:sr.spaceId, noteId:sr.id})">
+                                    <b>{{sr.name}}</b>
+                                </a>
+                               <small>The note has <b>{{sr.content.length}}</b> characters.</small>
+                            </div>
+                        </div>
+                        <div ng-if="sr.type==='item'">
+                            <h5 style="color:black">
+                               <span ng-show="sr.hasDate" class="em-warning">
+                                    <i class="fa fa-calendar"></i>
+                                    {{sr.date | date:'yyyy-MM-dd'}}
+                                </span>
+                                <span  ng-hide="sr.hasDate" ><i class="fa fa-cube"></i> Item</span>
+                                <small class="pull-right"> 
+                                    changed by <b>{{sr.modifiedBy}}</b> <span>{{$ctrl.getFromNow(sr.modifiedOn)}}.</span>
+                                </small>
+                                <br>
+                                <small class="pull-right"> 
+                                    <span class="badge badge-primary"><i class="fa fa-cubes"></i> {{$ctrl.getSpaceName(sr.spaceId)}}</span>
+                                </small>
+                            </h5>
+                            <div>
+                                <a ui-sref="in.item_detail({spaceId:sr.spaceId, id:sr.id, tab: ''})">
+                                    <b>{{sr.name}}</b>
+                                </a>
+                                <small>
+                                    <span ng-show="sr.status"> The status is '{{sr.status.name}}'.</span>
+                                </small>
+                            </div>
+                        </div>
+                        <div ng-if="sr.type==='value'">
+                            <h5 style="color:black">
+                                <i class="fa fa-list-ol"></i> Value
+                                <small class="pull-right"> 
+                                    changed by <b>{{sr.modifiedBy}}</b> <span>{{$ctrl.getFromNow(sr.modifiedOn)}}.</span>
+                                </small>
+                                <br>
+                                <small class="pull-right"> 
+                                    <span class="badge badge-primary"><i class="fa fa-cubes"></i> {{$ctrl.getSpaceName(sr.spaceId)}}</span>
+                                </small>
+                            </h5>
+                            <div>
+                                <a ui-sref="in.item_detail({spaceId:sr.spaceId, id:sr.items[0].id, tab: ''})">
+                                    Value <i>{{sr.value}}</i> for date {{sr.date | date:'yyyy-MM-dd HH:mm'}}
+                                </a>
+                                <small>{{sr.comment}}</small>
+                            </div>
+                        </div>
+                        <div ng-if="sr.type==='itemType'">
+                            <h5 style="color:black">
+                            	<span><i class="fa fa-tag"></i> Item Type</span>
+                                <i style="color:{{sr.color}}" class="{{sr.icon}}"></i>
+                                <small class="pull-right"> 
+                                    changed by <b>{{sr.modifiedBy}}</b> <span>{{$ctrl.getFromNow(sr.modifiedOn)}}.</span>
+                                </small>
+                                <br>
+                                <small class="pull-right"> 
+                                    <span class="badge badge-primary"><i class="fa fa-cubes"></i> {{$ctrl.getSpaceName(sr.spaceId)}}</span>
+                                </small>
+                            </h5>
+                            <div>
+                                <a ui-sref="in.itemtypes({id:sr.spaceId})">
+                                    <b>{{sr.name}}</b>
+                                </a>                                
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <loader ng-show="$ctrl.loadingMore"></loader>
+                
+                <div class="text-center">
+                <a class="clickable" ng-click="$ctrl.loadMore()" title="Load more results...">
+                    <span class="icon-ar icon-ar-sm icon-ar-inverse icon-ar-circle"  style="margin-bottom:20px">
+                    <i class="fa fa-angle-double-down"></i>
+                    </span>
+                </a>
+                </div>
+
+            </div><!--/row-->
+
+
+    </div>
+
+</div>

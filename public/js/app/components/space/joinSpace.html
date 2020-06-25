@@ -1,0 +1,34 @@
+<div class="container">
+    <div class="row">
+
+        <br/>
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <h2 class="section-title no-margin-top"><i></i>Join the Space {{$ctrl.spaceName}}?</h2>
+            <h5>Please confirm or dismiss the pending invitation for this Space.</h5>
+
+            <div class="panel panel-primary-dark animated fadeInDown">
+                <div class="panel-heading">Confirm</div>
+                <div class="panel-body">
+                    <form name="joinForm" role="form">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p>Please note that if you <i>confirm</i> this invitation and join the Space, this Space 
+                                    membership will be accounted to your current plan.</p>
+                                <button ng-click="$ctrl.confirmInvitation(true)"
+                                        type="submit" class="btn btn-ar btn-success" tabindex="1">
+                                    Join Space&nbsp; <i class="fa fa-check"></i>
+                                </button>
+
+                                <button ng-click="$ctrl.confirmInvitation(false)"
+                                        type="submit" class="btn btn-ar btn-danger" tabindex="2">
+                                    Dismiss Invitation &nbsp; <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

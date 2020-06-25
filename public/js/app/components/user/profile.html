@@ -1,0 +1,288 @@
+<br/>
+
+<div class="container">
+    <div class="row">
+		<!-- Nav tabs -->
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#profile" onclick="return false;" data-toggle="tab"><i class="fa fa-user"></i> Profile</a></li>
+			<!--li><a href="#notifications" onclick="return false;" data-toggle="tab"><i class="fa fa-bell"></i> Notifications</a></li-->
+			<li><a href="#billing" onclick="return false;" data-toggle="tab"><i class="fa fa-usd"></i> Plans & Billing</a></li>
+		</ul>
+
+		<div class="tab-content">
+			<div class="tab-pane active" id="profile">
+				<div class="col-md-4">
+					<section>
+						<img src="{{$ctrl.avatarUrl}}" alt="avatar" class="img-responsive imageborder">
+					</section>
+					<section>
+						<h3 class="section-title">Update your look</h3>
+						<form role="form">
+
+							<div class="form-group">
+								<input type="file" id="myAvatarFile" name="myAvatarFile"/>
+								<button ng-click="$ctrl.addFile()">Add</button>
+<!--
+								<input type="file" ng-select="$ctrl.onImageSelect($files)" accept="image/*">
+-->
+							</div>
+
+						</form>
+					</section>
+				</div>
+				<div class="col-md-8">
+					<section>
+						<div class="panel panel-primary">
+							<div class="panel-heading"><i class="fa fa-user"></i> General Information</div>
+							<table class="table table-striped">
+								<tr>
+									<th>User Name</th>
+									<td>{{$ctrl.user.username}}</td>
+								</tr>
+								<tr>
+									<th>Full Name</th>
+									<td>
+										<a href="#"  editable-text="user.name" onbeforesave="$ctrl.saveUser()">{{ $ctrl.user.name || 'empty' }}</a>
+									</td>
+								</tr>
+								<tr>
+									<th>Email</th>
+									<td><a href="mailto:{{$ctrl.user.email}}">{{$ctrl.user.email}}</a></td>
+								</tr>
+								<tr>
+									<th>Member Since</th>
+									<td>{{$ctrl.user.activatedOn | date:'yyyy-MM-dd'}}</td>
+								</tr>
+								<tr>
+									<th>Alias Names
+										<a data-animation="am-flip-x" bs-tooltip="'Put your usernames from other accounts seperated by comma in this field.' +
+                                'This helps integrations to map incoming data - eg. Github commits - magically to your account :)'"><i class="fa fa-question"></i>
+										</a>
+										<a class="btn btn-xs btn-primary" data-toggle="modal" data-target="#addAlias">
+											<i class="fa fa-plus"></i>
+										</a>
+									</th>
+									<td>
+										<ul class="list-unstyled">
+											<li ng-repeat="alias in $ctrl.user.aliasNames">
+												<b>{{alias.source}}: </b>
+												<a href="#"  editable-text="alias.name" onbeforesave="$ctrl.saveUser()">
+													{{ alias.name || 'empty' }}
+												</a>
+												<a class="clickable" ng-click="$ctrl.removeAlias(alias)"><i class="fa fa-remove" style="color:red"></i></a>
+											</li>
+										</ul>
+
+									</td>
+								</tr>
+							</table>
+						</div>
+					</section>
+
+					<section>
+						<h2 class="section-title">Teambased Spaces</h2>
+						<div class="list-group">
+							<div class="form-group">
+								<label>Accept Space Invitations</label>
+								<input type="checkbox" data-ng-model="$ctrl.user.acceptInvitations" data-ng-change="$ctrl.saveUser()"/>
+								<p>
+									Your <i>username</i> and <i>email</i> (and no further information) is searchable, so other users
+									may invite you to join their spaces. You can still dismiss incoming invitations.
+								</p>
+							</div>
+						</div> <!--list-group -->
+					</section>
+
+					<section>
+						<h2 class="section-title">Space Memberships</h2>
+						<div class="list-group">
+							<div data-ng-repeat="p in $ctrl.spaces">
+								<div class="list-group-item">
+
+									<button class="btn btn-xs btn-danger pull-right" ng-click="$ctrl.selectSpace(p)"
+											data-toggle="modal" data-target="#leaveSpaceModal"
+											><i class="fa fa-times"></i> Leave
+									</button>
+
+									<h3><a ui-sref="in.space({id:p.id})">{{p.name}}</a>
+										<small>
+											<label data-ng-show="p.userIsAdmin" class="label label-royal">Space Admin</label>
+											<label data-ng-hide="p.userIsAdmin" class="label label-success">Space User</label>
+										</small>
+									</h3>
+
+
+									<div marked="p.description ? ((p.description | limitTo : 50) + '...') : '(empty)' | emoji"></div>
+
+								</div>
+							</div>
+						</div> <!--list-group -->
+					</section>
+				</div>
+			</div>
+			<div class="tab-pane" id="billing">
+
+				<div class="panel panel-info">
+					<div class="panel-heading"><i class="fa fa-usd"></i> Billing Details</div>
+					<div class="panel-body">
+						<form class="form-horizontal" role="form">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Active Plan</label>
+								<div class="col-sm-6">
+									<span><b>Micro (5 Spaces)</b></span>
+								</div>
+								<div class="col-sm-4">
+									<a class="clickable btn btn-sm btn-primary" ng-click="$ctrl.showPlans=!$ctrl.showPlans">
+                                        <i ng-show="$ctrl.showPlans" class="fa fa-caret-up"></i>
+                                        Change Plan
+                                    </a>
+								</div>
+
+                                <div class="row" ng-show="$ctrl.showPlans">
+                                    <div class="col-sm-8">
+                                        <h4>Change Plan</h4>
+                                        <div class="panel panel-default">
+                                        <table class="table table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th>Plan</th>
+                                                <th>Price</th>
+                                                <th>Spaces</th>
+                                                <th></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr ng-repeat="p in $ctrl.plans">
+                                                <td>{{p.name}}</td>
+                                                <td>{{p.price}}</td>
+                                                <td>{{p.spaces}}</td>
+                                                <td><a class="clickable btn btn-default btn-xs">Choose</a></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        </div>
+                                    </div>
+                                </div>
+							</div>
+                            <hr class="dashed"/>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Payment</label>
+								<div class="col-sm-6">
+									<span><b>Paypal</b></span><br/>
+									<span>Account: <b>m.antensteiner@aon.at</b></span><br/>
+									<span>Postal Code: <b>4580</b></span><br/>
+                                    <br/>
+									<span>Next payment due: <b>2015-02-28</b></span><br/>
+									<span>Amount: <b>$7.00</b></span>
+								</div>
+								<div class="col-sm-4">
+                                    <a class="clickable btn btn-sm btn-primary">Change Paypal Account</a>
+								</div>
+							</div>
+                            <hr class="dashed"/>
+                            <div class="form-group">
+								<label class="col-sm-2 control-label">Extra Info</label>
+								<div class="col-sm-6">
+									<span><input type="text" style="width: 60%" value="" placeholder="VAT ID"/> (VAT ID)</span> <br/>
+									<span><input type="text" style="width: 80%" value="" placeholder="More information..."/></span>
+								</div>
+								<div class="col-sm-4">
+									<a class="btn btn-sm btn-primary clickable">Update Information</a>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<div class="panel panel-info">
+					<div class="panel-heading"><i class="fa fa-history"></i> Payment History</div>
+					<table class="table table-striped">
+						<thead>
+						<tr>
+							<th>Reference</th>
+							<th>Date</th>
+							<th>Plan</th>
+							<th>Method</th>
+							<th>Receipt</th>
+							<th>Amount</th>
+							<th>Status</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr>
+							<td>3S7ZCJM</td>
+							<td>2015-01-29</td>
+							<td>Micro</td>
+							<td>Paypal</td>
+							<td><a href="">Open</a></td>
+							<td>USD $7.00</td>
+							<td>Succeeded</td>	
+						</tr>
+						</tbody>
+
+					</table>
+				</div>
+				
+			</div>
+			<div class="tab-pane" id="notifications">
+			</div>
+		</div>
+		
+
+    </div>
+
+    <!-- Modal Edit User -->
+    <div class="modal fade" id="leaveSpaceModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Leave Space '{{$ctrl.selectedSpace.name}}'?</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">Really leave Space <b>{{$ctrl.selectedSpace.name}}</b> and lose access to all space data?</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ar btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-ar btn-danger" data-dismiss="modal" ng-click="$ctrl.leaveSpace($ctrl.selectedSpace)">
+                        I want to leave the space</button>
+                </div>
+            </div>
+        </div>
+    </div>
+		
+		
+    <!-- Modal Add User Alias -->
+    <div class="modal fade" id="addAlias" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Add Alias Name</h4>
+                </div>
+                <div class="modal-body">
+									<div class="form-group">
+											<label>Source:</label> 
+											<select style="width:250px;font-size:1.2em" ng-options="as.name for as in $ctrl.aliasConfig.sources" 
+                                                ng-model="$ctrl.selectedAliasSource">
+											</select>
+									</div>
+									<div class="form-group">
+											<label>Alias-Name:</label>
+											<input type="text" data-ng-model="$ctrl.selectedAliasName"/>
+									</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ar btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-ar btn-danger" data-dismiss="modal" 
+											ng-disabled="!$ctrl.selectedAliasName || !$ctrl.selectedAliasSource"
+											ng-click="$ctrl.addAlias($ctrl.selectedAliasSource, $ctrl.selectedAliasName)">
+                    	Add
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

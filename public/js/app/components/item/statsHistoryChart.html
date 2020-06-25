@@ -1,0 +1,71 @@
+
+<span class="pull-left label label-default">
+    {{$ctrl.historyChart.aggType.name}} over <i>{{$ctrl.historyAggTimeRange}}</i> {{$ctrl.historyChart.interval.name}}s
+    <span>Average: {{$ctrl.chartDataAggs.avg}}</span>
+</span>
+
+<nvd3 options="$ctrl.chartOptions" data="$ctrl.chartData"></nvd3>
+
+
+<!-- Chart settings -->
+<div class="modal fade" id="changeChartSettingsModal" role="dialog" aria-hidden="true" >
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Chart Settings
+                </h4>
+            </div>
+            <div class="modal-body">
+            <div role="form">
+                <div class="form-group">
+                    <label>Time Range</label>
+                    <input class="form-control" type="number" ng-model="$ctrl.historyAggTimeRange">
+                </div>
+                <div class="form-group">
+                    <label>Time Interval</label>
+                    <select style="width: 100%" ui-select2  ng-model="$ctrl.historyChart.intervalId"
+                            data-placeholder="Pick time interval">
+                        <option ng-repeat="tf in $ctrl.timeframes" value="{{tf.id}}">{{tf.name}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Aggregation Type</label>
+                    <select style="width: 100%" ui-select2  ng-model="$ctrl.historyChart.aggTypeId"
+                            data-placeholder="Pick aggregation type">
+                        <option ng-repeat="at in $ctrl.aggregationTypes" value="{{at.id}}">{{at.name}}</option>
+                    </select>
+
+                </div>
+                <hr class="dashed">
+                <span></span>
+                <div class="row">
+                    <div class="col-sm-5">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input style="width:100%" type="text" ng-model="$ctrl.selectedChartName">
+                    </div>
+                    </div>
+                    <div class="col-sm-5">
+                    <div class="form-group">
+                        <label>Target-Value for Interval</label>
+                        <input style="width:100%"  type="number" ng-model="$ctrl.selectedChartTargetValue">
+                    </div>
+                    </div>
+                    <div class="col-sm-2">
+                    <div class="form-group">
+                        <br class="hidden-xs">
+                        <a class="btn btn-sm btn-primary"><i class="fa fa-save"></i> Save Chart</a>
+                    </div>
+                    </div>
+                </div>
+
+            </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-ar btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-ar btn-primary" data-ng-click="$ctrl.loadHistoryAgg()" data-dismiss="modal">Apply</button>
+            </div>
+        </div>
+    </div>
+</div>

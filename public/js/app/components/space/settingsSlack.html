@@ -1,0 +1,39 @@
+<div class="tab-pane" id="slack" ng-if="$ctrl.activeTab === 'slack'">
+    <form role="form">
+        <div class="form-group">
+            <h4>Slack Integration</h4>
+            <label>WebHook Url</label>
+            <input type="text" data-ng-model="project.slackWebHookUrl" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <h4>enyine Events <small>Trigger actions to following hook events</small></h4>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox"  data-ng-model="project.slackPostNewTime" >
+                    Post when a new 'Time' is created
+                </label>
+            </div>
+
+            <h4><i class="fa fa-github"></i> Github Events <small>Easily forward Github actions to Slack</small></h4>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox"  data-ng-model="project.slackPostGitPush" >
+                    Post on 'Push' event with commit information
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox"  data-ng-model="project.slackPostGitIssue" >
+                    Post on 'Issue' events
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox"  data-ng-model="project.slackPostGitIssueComment" >
+                    Post on 'Issue Comment' events
+                </label>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,127 @@
+<br/>
+
+<div class="fluid-container">
+
+    <loader show="$ctrl.viewLoading()"></loader>
+
+    <div class="col-xs-12" ng-show="!$ctrl.viewLoading()" class="row">
+
+        <div class="col-xs-12">
+            <div>
+                <h2 class="section-title no-margin-top">
+                    Items Board
+                    <button class="btn btn-default" type="button" style="margin-left: 5px"
+                            data-toggle="modal" data-target="#createItemModal" data-ng-click="$ctrl.clearItem()">
+                        <span class="fa fa-plus"></span> Add
+                    </button>
+                    <!--button class="btn btn-default" type="button" style="margin-left: 5px"
+                            data-toggle="modal" data-target="#notesModal" data-ng-click="loadNotes()">
+                        <span class="fa fa-file-text"></span> Notes
+                    </button-->
+
+                    <space-dropdown space-id="$ctrl.spaceId" space-name="$ctrl.space.name"></space-dropdown>
+                </h2>
+            </div>
+
+
+
+            <div ng-show="!$ctrl.itemsLoading" class="row board-box">
+                <br/>
+                <div class="row">
+
+                    <div class="col-sm-8">
+                        <div style="margin-left:10px">
+                            <isteven-multi-select
+                                    input-model="$ctrl.itemTypesMarkup"
+                                    output-model="$ctrl.selectedFilterItemTypes"
+                                    button-label="color name"
+                                    item-label="color name"
+                                    tick-property="ticked"
+                                    helper-elements="$ctrl.filter"
+                                    default-label="Filter by item types..."
+                                    on-item-click="$ctrl.filterByItemTypes( data )"
+                                    >
+                            </isteven-multi-select>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-4">
+                        <form style="margin-right: 10px">
+                            <div class="input-group">
+                                <input type="text" placeholder="Text filter..." class="form-control" autofocus="true"
+                                       data-ng-model="$ctrl.textFilter">
+                                    <span class="input-group-btn">
+                                    <button class="btn btn-ar btn-primary" type="button" data-ng-click="$ctrl.execFilter()">
+                                        <i class="fa fa-search no-margin-right"></i>
+                                    </button>
+                                    </span>
+                            </div>
+                            <input style="display:inline;visibility: hidden" type="submit" data-ng-click="$ctrl.execFilter()"/>
+                            <span ng-if="$ctrl.missingStatusItemsCount>0" class="badge badge-primary pull-right" style="margin:10px 0px 0px 0px">
+                                <a style="color:white" ng-href="#/space/{{spaceId}}/items/list//+(_missing_:status.id)">
+                                    Items with missing status: {{$ctrl.missingStatusItemsCount}}                                
+                                </a>
+                            </span>
+                        </form>
+
+                    </div>
+                </div>
+                
+                <div data-ng-repeat="s in $ctrl.itemStatus">
+
+                    <div class="board-column animated fadeIn fastDelayAnimation"
+                         data-ng-class="{'col-sm-{{$ctrl.colWidth}}': true}"
+                         tu-drop-target="true" on-drop='dropped()' data-dropable="true" data-status-id="{{s.id}}" style="margin-top:5px">                            
+                         <span class="pull-right" ng-class="{'label label-danger': ($ctrl.itemsByStatus['s'+s.id].total > s.limit),
+                              'label label-info':  ($ctrl.itemsByStatus['s'+s.id].total<= s.limit) }" ng-if="s.limit">
+                              Limit: {{s.limit}}
+                         </span>
+                        <div class="text-center">
+                            <h5>{{s.name}} ({{$ctrl.itemsByStatus['s'+s.id].total}})
+                            </h5>
+                        </div>
+    
+                        <div  data-ng-repeat="t in $ctrl.itemsByStatus['s'+s.id].items"
+                              class="animated fadeIn animation-delay-1">
+                        <div class="board-card grab stripe-left-primary" ng-class="{'stripe-left-warning': t.hasDate}" 
+                            tu-draggable="true" id="{{t.id}}" data-status-id="{{s.id}}">
+                            <span>
+                                <span class="pull-right"><img ng-src="/api/user/getAvatar/x?username={{t.modifiedBy}}" style="max-width:35px;max-height:35px"title="{{t.modifiedBy}}"/></span>
+
+                                <span ng-show="t.hasDate" class="em-warning">
+                                    <i title="Event or Action: Item with Date {{t.date}}" class="icon-ar icon-ar-sm icon-ar-warning glyphicon glyphicon-flash"></i>
+                                </span>
+
+                                <span style="color:{{$ctrl.getItemType(t.itemTypeId).color}}">
+                                    <i class="{{$ctrl.getItemType(t.itemTypeId).icon}}"></i> {{$ctrl.getItemType(t.itemTypeId).name}}
+                                </span>
+                                <br>
+                                <span title="{{t.comment}}">{{t.name}}
+                                    <a ui-sref="in.item_detail({spaceId: $ctrl.spaceId, id: t.id, tab:''})"><i class="fa fa-arrow-right"></i></a>                                
+                                </span>
+                            </span>
+
+                        </div>
+                        </div>
+    
+                        <div class="text-center" ng-show="$ctrl.itemsByStatus['s'+s.id].loading"><i class="fa fa-spinner fa-spin"></i></div>
+    
+    
+                        <div class="text-center">
+                        <a class="clickable" ng-click="$ctrl.loadMoreStateItems(s.id)" title="loadMore">
+                            <span class="icon-ar icon-ar-sm icon-ar-inverse icon-ar-circle"  style="margin-top:5px">
+                            <i class="fa fa-angle-double-down"></i>
+                            </span>
+                        </a>
+                        </div>
+    
+                    </div>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <create-item-modal space-id="$ctrl.spaceId" item-status = "$ctrl.itemStatus" on-save="$ctrl.itemCreated()">
+    </create-item-modal>
+</div>

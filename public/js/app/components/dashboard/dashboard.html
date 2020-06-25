@@ -1,0 +1,146 @@
+<br/>
+
+<div class="container">
+
+    <loader ng-show="$ctrl.spacesLoading()"></loader>
+
+    <div ng-show="!$ctrl.spacesLoading()" class="row row-offcanvas row-offcanvas-left animated fadeIn animation-delay-1">
+
+
+            <div class="col-xs-12">
+                <div class="col-sm-6">
+                    <div class="panel panel-info dash-box">
+                        <div class="panel-heading"><i class="fa fa-cubes"></i> Your Spaces</div>
+                        <div class="panel-body">
+                           <form ng-submit="$ctrl.search()">
+                                <input ng-hide="true" type="submit"/>
+                                <div class="input-group">
+                                    <input type="text" placeholder="Search in your spaces..." class="form-control"
+                                           ng-model="$ctrl.searchQuery">
+                                        <span class="input-group-btn">
+                                        <button class="btn btn-ar btn-primary" type="submit">
+                                            <i class="fa fa-search no-margin-right"></i>
+                                        </button>
+                                        </span>
+                                </div>
+                            </form>
+                            <hr class="dashed">
+                            
+                            <div ng-show="$ctrl.spaces.length == 0" class="alert alert-info">
+                                <h3>Please <a class="em-info clickable"  data-toggle="modal" data-target="#addSpaceModal"><i class="fa fa-plus"></i> add</a> your
+                                    first Space!</h3>
+                            </div>
+                            <div data-ng-repeat="space in $ctrl.spaces">
+                                <div class="content-box box-default animated fadeIn animation-delay-2">
+                                    <h3>{{space.name}}
+                                    </h3>
+        
+                                    <blockquote class="blockquote-color" ng-if="space.missionStatement">
+                                        <p marked="(space.missionStatement ? space.missionStatement : '') | emoji"></p>
+                                    </blockquote>
+                                    
+                                    <p class="hidden-xs" marked="(space.description ? ((space.description | limitTo : 500) + '...') : '') | emoji"></p>
+                                    <p class="visible-xs" marked="(space.description ? ((space.description | limitTo : 100) + '...') : '') | emoji"></p>
+
+                                    <p>
+                                        <a  class="btn btn-ar btn-primary" data-ng-click="space.showtest=!space.showtest" role="button">Detail Views
+                                            <i ng-class="{'fa fa-caret-down':!space.showtest, 'fa fa-caret-up':space.showtest}"></i></a>
+                                    </p>
+        
+                                    <p>
+                                        <ul ng-show="space.showtest===true" class="list-group animated fadeIn">
+                                            <li class="list-group-item">
+                                                <a ui-sref="in.items({id:space.id,view:'items',listMode:'list',filter:'',filterQuery:''})"><i class="fa fa-align-justify"></i> Items</a>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <a ui-sref="in.board({id:space.id,view:'board'})"><i class="fa fa-columns"></i> Board</a>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <a ui-sref="in.values({id:space.id})"><i class="fa fa-list-ol"></i>
+                                                    Values
+                                                </a>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <a ui-sref="in.notes({spaceId:space.id, noteId:''})"><i class="fa fa-pencil-square-o"></i> Notes</a>
+                                            </li>
+                                        </ul>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--/span-->
+                </div>
+                <div class="col-sm-6 animated fadeIn animation-delay-2">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="panel panel-info dash-box">
+                                <div class="panel-heading"><i class="fa fa-flash em-warning"></i> Next Events</div>
+                                <div class="panel-body">
+                                    <div>
+                                        <div class="text-center" ng-show="$ctrl.loadingEvents"><i class="fa fa-spinner fa-spin"></i> loading...</div>                
+                                        <div ng-show="!loadingEvents">
+                                            <h5 ng-hide="$ctrl.eventItems.length > 0">No items with dates yet...</h5>
+                                            <ul ng-show="$ctrl.eventItems" class="list-group">
+                                                <li class="list-group-item" ng-repeat="et in $ctrl.eventItems">
+                                                    <span class="fa fa-calendar"> <b>{{et.date | date:'yyyy-MM-dd'}}</b></span>
+                                                    <a ui-sref="in.item_detail({spaceId:et.spaceId,id:et.id})"><span>{{et.name}}</span></a>
+                                                    <span style="font-size:0.9em;"><b>{{getSpaceName(et.spaceId)}}</b></span>
+                                                    <span class="pull-right" title="Mood: {{et.mood}}" data-ng-bind-html="et.mood ? et.mood : '' | emoji"></span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="panel panel-info dash-box">
+                                <div class="panel-heading"><i class="fa fa-history"></i> Latest Activities</div>
+                                <div class="panel-body">
+                                    <div class="text-center" ng-show="$ctrl.loadingActions"><i class="fa fa-spinner fa-spin"></i> loading...</div>
+                                    <div ng-show="!$ctrl.loadingActions">
+                                        <h5 ng-hide="$ctrl.userActions.length > 0">Nothing happened so far...</h5>
+    
+                                        <ul ng-show="$ctrl.userActions" class="list-group">
+                                            <li class="list-group-item" ng-repeat="a in $ctrl.userActions">
+    
+                                                <small title="{{a.timestamp |date:'yyyy-MM-dd HH:mm'}}">
+    
+                                                    <span class="pull-right">
+                                                    <b>{{a.type}} {{a.action}}</b>
+                                                    {{a.timestamp |date:'yyyy-MM-dd'}}
+                                                    <span ng-show="a.user.username">
+                                                        , by {{a.user.username}}
+                                                        <i class="fa fa-user"></i>
+                                                        </span>
+                                                     </span>
+                                                </small>
+                                                <small>
+                                                    <a ng-click="$ctrl.goToRecord(a)" class="clickable">
+                                                        <span title="{{a.changedFields.length}} fields changed: {{a.changedFields.toString()}}"
+                                                            class="badge">{{a.changedFields.length}}</span>
+                                                        <span style="font-size:0.9em;"><i>{{a.operation}} {{a.data[a.type].name}}</i>-</span>
+                                                    </a>
+                                                        <span style="font-size:0.9em;">
+                                                          <b>
+                                                            <a ui-sref="in.space_settings({id:a.spaceId})">{{$ctrl.getSpaceName(a.spaceId)}}</a>
+                                                          </b>
+                                                          </span>
+                                                </small>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+    </div>
+    <!-- Modal Add Space -->
+    <add-space-modal on-saved="$ctrl.addedSpace()"></add-space-modal>
+</div>

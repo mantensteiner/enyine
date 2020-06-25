@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="enyine">
+<head>
+	<meta name="google-site-verification" content="Q4N-V7Cpw2OzVmWBwQeeIrDi3b6EGVntVjG6BwXj2k0" />
+	<meta charset="utf-8">
+	<title>enyine</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<link rel="shortcut icon" href="img/favicon.png" />
+
+	<link rel="apple-touch-icon" href="img/logo_raw.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="img/logo_raw.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="img/logo_raw.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="img/logo_raw.png">
+
+	<!-- CSS -->
+	<link href="libs/bootstrap/dist/css/bootstrap.css" rel="stylesheet" media="screen">
+	<link href="libs/bootstrap-additions/dist/bootstrap-additions.css" rel="stylesheet" media="screen">
+
+	<link href="libs/components-font-awesome/css/font-awesome.css" rel="stylesheet" media="screen">
+	<link href="libs/animate.css/animate.css" rel="stylesheet" media="screen">
+	<!--<link href="libs/slidebars/dist/slidebars.css" rel="stylesheet" media="screen">-->
+	<!--<link href="css/lightbox.css" rel="stylesheet" media="screen">-->
+
+	<link href="css/style-green.css" rel="stylesheet" media="screen" title="default">
+	<link href="css/width-full.css" rel="stylesheet" media="screen" title="default">
+
+	<link href="libs/angular-ui-select/dist/select.css" rel="stylesheet" media="screen">
+	<link href="libs/toastr/toastr.css" rel="stylesheet" media="screen">
+	<!--<link href="css/buttons.css" rel="stylesheet" media="screen">-->
+	<link href="libs/angular-emoji-filter/dist/emoji.min.css" rel="stylesheet" media="screen">
+	<link href="libs/angular-xeditable/dist/css/xeditable.css" rel="stylesheet" media="screen">
+	<link href="libs/ng-tags-input/ng-tags-input.css" rel="stylesheet" media="screen">
+	<link href="libs/ng-tags-input/ng-tags-input.bootstrap.css" rel="stylesheet" media="screen">
+	<link href="libs/angular-multi-select/isteven-multi-select.css" rel="stylesheet" media="screen">
+	<link href="libs/angular-bootstrap-colorpicker/css/colorpicker.css" rel="stylesheet" media="screen">
+	<link href="libs/nvd3/build/nv.d3.css" rel="stylesheet" media="screen">
+	<link href="libs/angular-motion/dist/angular-motion.css" rel="stylesheet" media="screen">
+
+	<link href="css/main.css" rel="stylesheet" media="screen">
+	<!--<link href="css/bootstrap-typeahead-custom.css" rel="stylesheet" media="screen">-->
+
+</head>
+<body>
+
+<div>
+
+	<section id="headerSection" ui-view="nav"></section>
+
+	<section id="mainSection" ui-view></section>
+
+	<section id="footerSection" ui-view="footer"></section>
+
+</div>
+
+
+<script src="libs/jquery/jquery.js"></script>
+<script src="libs/jquery.cookie/jquery.cookie.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="libs/bootstrap/dist/js/bootstrap.js"></script>
+<!--<script src="js/lib/wow.min.js"></script>-->
+<script src="libs/slidebars/dist/slidebars.js"></script>
+<!--<script src="js/lib/buttons.js"></script>-->
+<!--<script src="js/lib/jquery.mixitup.min.js"></script>-->
+<script src="libs/underscore/underscore.js"></script>
+<script src="libs/momentjs/moment.js"></script>
+<script src="libs/fastclick/lib/fastclick.js"></script>
+<script src="libs/d3/d3.js"></script>
+<script src="libs/nvd3/build/nv.d3.js"></script>
+
+<script type="application/javascript"  src="libs/ng-file-upload/ng-file-upload-shim.js"></script>
+<script type="application/javascript"  src="libs/angular/angular.js"></script>
+<script type="application/javascript"  src="libs/angular-animate/angular-animate.js"></script>
+<script type="application/javascript"  src="libs/showdown/dist/showdown.js"></script>
+
+
+<script type="application/javascript"  src="libs/angular-sanitize/angular-sanitize.js"></script>
+<script type="application/javascript"  src="libs/angular-ui-router/release/angular-ui-router.js"></script>
+<script type="application/javascript"  src="libs/toastr/toastr.js"></script>
+<script type="application/javascript"  src="libs/angular-strap/dist/angular-strap.js"></script>
+<script type="application/javascript"  src="libs/angular-strap/dist/angular-strap.tpl.js"></script>
+
+
+<script type="application/javascript"  src="libs/angular-xeditable/dist/js/xeditable.js"></script>
+<script type="application/javascript"  src="libs/angular-ui-select/dist/select.js"></script>
+<script type="application/javascript"  src="libs/marked/lib/marked.js"></script>
+<script type="application/javascript"  src="libs/angular-marked/dist/angular-marked.js"></script>
+<script type="application/javascript"  src="libs/ng-file-upload/ng-file-upload.js"></script>
+<script type="application/javascript"  src="libs/ngDraggable/ngDraggable.js"></script>
+<!--<script type="application/javascript"  src="libs/ng-infinite-scroll/ng-infinite-scroll.js"></script>-->
+<script type="application/javascript"  src="libs/angular-multi-select/isteven-multi-select.js"></script>
+<script type="application/javascript"  src="libs/ng-tags-input/ng-tags-input.js"></script>
+<script type="application/javascript"  src="libs/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js"></script>
+<script type="application/javascript"  src="libs/angular-elastic/elastic.js"></script>
+<!--<script type="application/javascript"  src="js/lib/angular/line-chart.min.js"></script>-->
+<script type="application/javascript"  src="libs/angular-nvd3/dist/angular-nvd3.js"></script>
+<script type="application/javascript"  src="libs/angular-emoji-filter/dist/emoji.min.js"></script>
+
+<!-- App core -->
+<script type="application/javascript"  src="js/app/app.js"></script>
+<script type="application/javascript"  src="js/app/states.js"></script>
+<script type="application/javascript"  src="js/app/filters.js"></script>
+
+<!-- Directives --> 
+<script type="application/javascript"  src="js/app/directives/loader.js"></script>
+<script type="application/javascript"  src="js/app/directives/enterkey.js"></script>
+<script type="application/javascript"  src="js/app/directives/notifier.js"></script>
+<script type="application/javascript"  src="js/app/directives/contenteditable.js"></script>
+<script type="application/javascript"  src="js/app/directives/saveValueModal.js"></script>
+<script type="application/javascript"  src="js/app/directives/dragdrop.js"></script>
+<script type="application/javascript"  src="js/app/directives/notesModal.js"></script>
+
+<!-- Controllers -->
+<script type="application/javascript"  src="js/app/controllers/navbarController.js"></script>
+<script type="application/javascript"  src="js/app/controllers/spaceNavController.js"></script>
+
+<!-- Services -->
+<script type="application/javascript"  src="js/app/services/authService.js"></script>
+<script type="application/javascript"  src="js/app/services/userService.js"></script>
+<script type="application/javascript"  src="js/app/services/spaceService.js"></script>
+<script type="application/javascript"  src="js/app/services/itemService.js"></script>
+<script type="application/javascript"  src="js/app/services/itemTypeService.js"></script>
+<script type="application/javascript"  src="js/app/services/healthService.js"></script>
+<script type="application/javascript"  src="js/app/services/slackService.js"></script>
+<script type="application/javascript"  src="js/app/services/tagService.js"></script>
+<script type="application/javascript"  src="js/app/services/filterService.js"></script>
+<script type="application/javascript"  src="js/app/services/noteService.js"></script>
+<script type="application/javascript"  src="js/app/services/messageService.js"></script>
+<script type="application/javascript"  src="js/app/services/valueService.js"></script>
+<script type="application/javascript"  src="js/app/services/valueTypeService.js"></script>
+<script type="application/javascript"  src="js/app/services/quantityService.js"></script>
+<script type="application/javascript"  src="js/app/services/queryCacheService.js"></script>
+<script type="application/javascript"  src="js/app/services/githubService.js"></script>
+<script type="application/javascript"  src="js/app/services/utilityService.js"></script>
+<script type="application/javascript"  src="js/app/services/chartService.js"></script>
+<script type="application/javascript"  src="js/app/services/emojiService.js"></script>
+<script type="application/javascript"  src="js/app/directives/topicSideNav.js"></script>
+
+<!-- Components -->
+<script type="application/javascript"  src="js/app/components/_shared/spaceDropdown.js"></script>
+<script type="application/javascript"  src="js/app/components/dashboard/dashboard.js"></script>
+<script type="application/javascript"  src="js/app/components/item/itemDetail.js"></script>
+<script type="application/javascript"  src="js/app/components/item/itemDetailValuesTab.js"></script>
+<script type="application/javascript"  src="js/app/components/item/statsView.js"></script>
+<script type="application/javascript"  src="js/app/components/item/statsHistoryChart.js"></script>
+<script type="application/javascript"  src="js/app/components/item/statsUserChart.js"></script>
+<script type="application/javascript"  src="js/app/components/item/itemDetailActivityTab.js"></script>
+<script type="application/javascript"  src="js/app/components/item/itemDetailRelationsTab.js"></script>
+<script type="application/javascript"  src="js/app/components/item/itemList.js"></script>
+<script type="application/javascript"  src="js/app/components/item/itemsBulkEdit.js"></script>
+<script type="application/javascript"  src="js/app/components/item/itemsRelations.js"></script>
+<script type="application/javascript"  src="js/app/components/item/saveValueToItemModal.js"></script>
+<script type="application/javascript"  src="js/app/components/item/createItemModal.js"></script>
+<script type="application/javascript"  src="js/app/components/item/manageFiltersModal.js"></script>
+<script type="application/javascript"  src="js/app/components/itemtype/itemTypeList.js"></script>
+<script type="application/javascript"  src="js/app/components/itemtype/editItemType.js"></script>
+<script type="application/javascript"  src="js/app/components/valuetype/manageValueTypes.js"></script>
+<script type="application/javascript"  src="js/app/components/value/valueList.js"></script>
+<script type="application/javascript"  src="js/app/components/value/valuesSidebar.js"></script>
+<script type="application/javascript"  src="js/app/components/value/createValueModal.js"></script>
+<script type="application/javascript"  src="js/app/components/value/editValueModal.js"></script>
+<script type="application/javascript"  src="js/app/components/note/notes.js"></script>
+<script type="application/javascript"  src="js/app/components/board/board.js"></script>
+<script type="application/javascript"  src="js/app/components/space/activities.js"></script>
+<script type="application/javascript"  src="js/app/components/space/addSpaceModal.js"></script>
+<script type="application/javascript"  src="js/app/components/space/joinSpace.js"></script>
+<script type="application/javascript"  src="js/app/components/space/settings.js"></script>
+<script type="application/javascript"  src="js/app/components/space/settingsGeneral.js"></script>
+<script type="application/javascript"  src="js/app/components/space/settingsGithub.js"></script>
+<script type="application/javascript"  src="js/app/components/space/settingsSlack.js"></script>
+<script type="application/javascript"  src="js/app/components/space/users.js"></script>
+<script type="application/javascript"  src="js/app/components/space/userEditModal.js"></script>
+<script type="application/javascript"  src="js/app/components/space/userRemoveModal.js"></script>
+<script type="application/javascript"  src="js/app/components/user/profile.js"></script>
+<script type="application/javascript"  src="js/app/components/search/search.js"></script>
+<script type="application/javascript"  src="js/app/components/legal/tos.js"></script>
+<script type="application/javascript"  src="js/app/components/legal/privacy.js"></script>
+<script type="application/javascript"  src="js/app/components/auth/activate.js"></script>
+<script type="application/javascript"  src="js/app/components/auth/login.js"></script>
+<script type="application/javascript"  src="js/app/components/auth/logout.js"></script>
+<script type="application/javascript"  src="js/app/components/auth/resetPassword.js"></script>
+<script type="application/javascript"  src="js/app/components/auth/signup.js"></script>
+<script type="application/javascript"  src="js/app/components/navigation/navbar.js"></script>
+<script type="application/javascript"  src="js/app/components/navigation/navbarLoggedOut.js"></script>
+<script type="application/javascript"  src="js/app/components/homepage/homePage.js"></script>
+<script type="application/javascript"  src="js/app/components/homepage/homeFeatures.js"></script>
+<script type="application/javascript"  src="js/app/components/homepage/homePricing.js"></script>
+<script type="application/javascript"  src="js/app/components/homepage/homeAbout.js"></script>
+
+</body>
+</html>

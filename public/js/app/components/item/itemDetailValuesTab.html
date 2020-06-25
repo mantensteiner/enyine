@@ -1,0 +1,100 @@
+<div ng-if="$ctrl.activeTab === 'values_'+$ctrl.valueTypeId">
+    <h4><i class="{{$ctrl.item.icon}}" style="color:{{ul.color}}"></i> {{$ctrl.valueType.name}}
+        <button class="btn btn-primary btn-sm" type="button" style="margin-left: 5px" data-ng-click="$ctrl.selectValue(null, ul)"
+                data-toggle="modal" data-target="#saveValueToItemModal">
+            <span class="fa fa-plus"></span> <span>Add</span>
+        </button>
+
+        <a class="btn btn-sm btn-primary pull-right" ng-click="$ctrl.toggleStatsView()">
+            <span title="Show value list"  ng-if="$ctrl.showStats"><i class="fa fa-list" style=""></i> Values</span>
+            <span title="Show statistics"  ng-if="!$ctrl.showStats"><i class="fa fa-line-chart" style=""></i> Stats</span>
+        </a>
+    </h4>
+
+    <!-- List view -->
+    <div ng-if="!$ctrl.showStats">
+        <span class="pull-right badge badge-default">
+            Sum: {{$ctrl.valueSum}}{{$ctrl.valueType.symbol}}
+        </span>
+        <span class="pull-left label label-primary">Total: {{$ctrl.valuesTotal}}</span>
+
+        <table class="table" infinite-scroll="loadMoreValues()" infinite-scroll-disabled="moreValuesLoading" infinite-scroll-distance='0'>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th width="25%">Description</th>
+                    <th>Value {{$ctrl.valueType.metrics[0].symbol}}</th>
+                    <th class="hidden-xs">Responsible</th>
+                    <th class="hidden-xs">Created On</th>
+                    <th class="hidden-xs"></th>
+                </tr>
+            </thead>
+            <tbody ng-show="!spaceValuesLoading"
+                    class=" table-striped animated fadeIn listAnimation" ng-class-odd="'default-striping'">
+                <tr data-ng-repeat="pv in $ctrl.spaceValues">
+                    <td>
+                        <a href="#"  editable-date="pv.date" onbeforesave="$ctrl.saveValue(pv)">
+                            {{ (pv.date | date:"yyyy-MM-dd") || 'empvy' }}
+                        </a>
+                    </td>
+                    <td title = '{{pv.comment}}'>
+                        <a class="clickable editlink"
+                            ng-click="$ctrl.editValueComment(pv)" ng-if="!pv.editComment">
+                            {{(pv.comment ? pv.comment : 'empty') | limitTo : 150}}{{pv.comment.length>150 ? '...' : ''}}
+                        </a>
+
+                        <form ng-if="pv.editComment">
+                            <!--
+                            <input type="text"
+                                class="form-control"
+                                ng-model="pv.commentText"
+                                bs-options="sug.text as sug.text for sug in $ctrl.getSuggestions($viewValue)"
+                                placeholder="Enter comment..." bs-typeahead>
+                            -->
+                            <input type="text"
+                                class="form-control"
+                                ng-model="pv.comment"
+                                placeholder="Enter comment...">
+                            <button ng-click="$ctrl.saveValueComment(pv)" type="submit" class="btn btn-xs btn-default"><i class="fa fa-save"></i></button>
+                            <a class="btn btn-xs btn-default" ng-click="$ctrl.cancelValueCommentEdit(pv)"><i class="em-red fa fa-times"></i></a>
+                        </form>
+                    </td>
+                    <td>
+                        <i ng-show="!pv.value" class="fa fa-warning"></i>
+                        <a href="#" e-step="any" editable-number="pv.value[pv.valueType.dataTypeKey]" onbeforesave="$ctrl.saveValue(pv)">
+                            {{ pv.value[pv.valueType.dataTypeKey] || 'empty' }}
+                        </a>
+                    </td>
+                    <td class="hidden-xs">
+                        <a onbeforesave="$ctrl.saveValue(pv)" href="#" editable-select="pv.responsible"
+                            e-ng-options="u as u.username for u in $ctrl.space.users">
+                            {{pv.responsible ? pv.responsible.username : pv.createdBy}}
+                        </a>
+                    </td>
+                    <td class="hidden-xs">{{pv.createdOn | date:'dd-MM-yyyy H:mm'}}</td>
+                    <td>
+                        <div class="pull-right">
+                            <a class="clickable" data-toggle="modal" data-target="#saveValueToItemModal" ng-click="$ctrl.selectedValue=pv">
+                                <i class="fa fa-edit"></i>
+                            <a>
+                            <a class="clickable" data-ng-click="$ctrl.deleteValue(pv.id)">
+                                <i class="fa fa-times-circle em-danger"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="text-center" ng-show="$ctrl.moreValuesLoading"><img src="/img/loader1.gif" alt=""/></div>        
+    </div>
+
+    <!-- Stats view -->
+    <stats-view ng-if="$ctrl.showStats" space-id="$ctrl.spaceId" item-id="$ctrl.item.id" value-type="$ctrl.valueType"></stats-view>
+
+    <!-- Save value modal --> 
+    <save-value-to-item-modal 
+        space-id="$ctrl.spaceId" item="$ctrl.item" selected-value="$ctrl.selectedValue" value-type="$ctrl.valueType"
+        on-save="$ctrl.saveValue({value: value})" on-delete="$ctrl.deleteValue({id: id})">
+    </save-value-to-item-modal>
+</div>

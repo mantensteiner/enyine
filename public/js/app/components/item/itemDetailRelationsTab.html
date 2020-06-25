@@ -1,0 +1,123 @@
+
+<div ng-if="$ctrl.activeTab === 'relations'">
+    <h4>Item Relationships
+    <a class="clickable btn btn-xs btn-default"
+        ui-sref="in.items_relations({id:$ctrl.spaceId,targetQuery:$ctrl.thisItemQuery, targetInfo:'Target Item: \''+$ctrl.item.name + '\''})">
+        <i class="fa fa-edit"></i>
+    </a>
+    </h4>
+
+    <!-- Filter Row -->
+    <div class="row">
+        <div class="col-xs-10 col-sm-8">
+            <isteven-multi-select
+                    input-model="$ctrl.itemTypesMarkup"
+                    output-model="$ctrl.selectedFilterItemTypes"
+                    button-label="color name"
+                    item-label="color name"
+                    tick-property="ticked"
+                    helper-elements="$ctrl.filter"
+                    default-label="Filter by labels..."
+                    on-item-click="$ctrl.filterByItemTypes( data )"
+                    >
+            </isteven-multi-select>
+
+        </div>
+        <div class="col-xs-2 visible-xs">
+            <a class="btn btn-default pull-right" ng-click="$ctrl.showFilter=!$ctrl.showFilter"><i class="fa fa-search"></i>
+                <i ng-show="!$ctrl.showFilter" class="fa fa-caret-down"></i>
+                <i ng-show="$ctrl.showFilter" class="fa fa-caret-up"></i>
+            </a>
+        </div>
+        <div class="col-xs-12" ng-show="$ctrl.showFilter" style="margin-top:5px">
+            <form>
+                <div class="input-group">
+                    <input type="text" placeholder="Text filter..." class="form-control"
+                            data-ng-model="$ctrl.textFilter">
+                            <span class="input-group-btn">
+                            <button class="btn btn-ar btn-primary" type="button" data-ng-click="$ctrl.execFilter()">
+                                <i class="fa fa-search no-margin-right"></i>
+                            </button>
+                            </span>
+                </div>
+                <input style="display:inline;visibility: hidden" type="submit" data-ng-click="$ctrl.execFilter()"/>
+            </form>
+        </div>
+
+        <div class="hidden-xs col-sm-4">
+            <form>
+                <div class="input-group pull-right">
+                <input type="text" placeholder="Text filter..." class="form-control"
+                        data-ng-model="$ctrl.textFilter">
+                <span class="input-group-btn">
+                <button class="btn btn-ar btn-primary" type="button" data-ng-click="$ctrl.execFilter()">
+                    <i class="fa fa-search no-margin-right"></i>
+                </button>
+                </span>
+                </div>
+                <input style="display:inline;visibility: hidden" type="submit" data-ng-click="$ctrl.execFilter()"/>
+            </form>
+        </div>
+    </div>
+
+    <!-- Result Table-->
+    <table class="table table-hover" infinite-scroll="$ctrl.loadMoreRelations()"
+            infinite-scroll-disabled="$ctrl.moreRelationsLoading" infinite-scroll-distance='0'>
+        <thead>
+        <tr>
+            <th width="15%">
+                ItemTypes
+            </th>
+            <th>
+                Name
+            </th>
+            <!--th class="hidden-xs hidden-sm hidden-md">Comment</th-->
+            <th class="hidden-xs clickable" ng-click="$ctrl.sort('modifiedOn')">
+                <i class="fa fa-sort" ng-show="$ctrl.sortBy != 'modifiedOn'"></i>
+                <i ng-show="$ctrl.sortBy == 'modifiedOn'" class="fa" ng-class="{
+                'fa-sort-desc': ($ctrl.sortDir == 'desc'),
+                'fa-sort-asc': ($ctrl.sortDir == 'asc')}"></i>
+                Changed On
+            </th>
+            <th class="hidden-xs clickable" ng-click="$ctrl.sort('status.name', 'asc')">
+                <i class="fa fa-sort" ng-show="$ctrl.sortBy != 'status.name'"></i>
+                <i ng-show="$ctrl.sortBy == 'status.name'" class="fa" ng-class="{
+                'fa-sort-desc': ($ctrl.sortDir == 'desc'),
+                'fa-sort-asc': ($ctrl.sortDir == 'asc')}"></i>
+                Status
+            </th>
+            <th style="width:20px">Remove</th>
+        </tr>
+        </thead>
+        <tbody  data-ng-repeat="t in $ctrl.relations" ng-show="!$ctrl.moreRelationsLoading || $ctrl.initRelations" ng-class-odd="'default-striping'"
+        class=" table-striped animated fadeIn listAnimation">
+        <tr>
+            <td class="">
+            <span style="color:{{$ctrl.getItemType(t.itemTypeId).color}}"><i class="{{$ctrl.getItemType(t.itemTypeId).icon}}"></i> {{$ctrl.getItemType(t.itemTypeId).name}}</span></li>
+            </td>
+            <td>
+            <span ng-show="t.hasDate" class="em-warning">
+                <i title="Event or Action: Item with Date {{t.date | date:'yyyy-MM-dd'}}" class="glyphicon glyphicon-flash"></i>
+            </span>
+            <a style="font-size:1.1em" class="clickable" ui-sref="in.item({$ctrl.spaceId: t.spaceId, id: t.id})">{{t.name}}</a>
+            </td>
+            <!--td class="hidden-xs  hidden-sm hidden-md">
+                <span data-ng-bind-html="t.comment ? t.comment : '' | emoji"></span>
+            </td-->
+            <td class="hidden-xs">
+                {{t.modifiedOn | date:'yyyy-MM-dd'}}
+            </td>
+            <td class="hidden-xs">
+            {{t.status.name}}
+            </td>
+            <td>
+            <span title="Remove from this list" class="clickable pull-right" data-ng-click="$ctrl.removeRelation(t)">
+                <i class="fa fa-minus"></i>
+            </span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="text-center" ng-show="$ctrl.moreRelationsLoading"><img src="/img/loader1.gif" alt=""/></div>
+</div>
+

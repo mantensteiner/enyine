@@ -1,0 +1,71 @@
+<div class="tab-pane" id="users" ng-if="$ctrl.activeTab === 'users'">
+    <h4>Project Members
+        <a class="clickable btn btn-primary pull-right" data-ng-click="$ctrl.lookupUser = !$ctrl.lookupUser"><i class="fa fa-plus"></i> Invite
+            <i ng-show="!$ctrl.lookupUser" class="fa fa-caret-down"></i>
+            <i ng-show="$ctrl.lookupUser" class="fa fa-caret-up"></i>
+        </a>
+    </h4>
+
+    <form ng-show="$ctrl.lookupUser" class="form-group has-feedback" data-ng-class="{'has-success' : $ctrl.validUserFound, 'has-warning' : !$ctrl.validUserFound}">
+        <label class="control-label" for="inputSuccess2">Please input user name or email and press enter to look for a user</label>
+
+        <span title="Valid user found" ng-show="$ctrl.validUserFound" class="glyphicon glyphicon-ok em-success"></span>
+        <span title="No valid user found"  ng-show="!$ctrl.validUserFound" class="glyphicon glyphicon-warning-sign em-warning"></span>
+
+        <div class="input-group">
+            <input data-ng-hide="true" type="submit" data-ng-click="$ctrl.findUser()" value="Find">
+            <input type="text" class="form-control" ng-model="$ctrl.findUserInput" id="inputSuccess2">
+
+            <span class="input-group-btn">
+                <button class="btn btn-ar btn-primary" type="button" data-ng-click="$ctrl.findUser()">
+                    <i class="fa fa-search no-margin-right"></i>
+                </button>
+            </span>
+        </div>
+
+        <p ng-show="$ctrl.validUserFound" class="well well-sm">
+            <a ng-show="$ctrl.validUserFound && !$ctrl.invitationSent" class="btn btn-primary btn-lg" style="margin-top:5px"
+                data-ng-click="$ctrl.sendInvite()"><i class="fa fa-envelope"></i> Send Invite!</a>
+
+            <a ng-show="$ctrl.validUserFound && $ctrl.invitationSent" class="btn btn-success btn-lg" style="margin-top:5px"
+                data-ng-disabled="true"><i class="fa fa-envelope"></i> Send Invite!<i class="fa fa-check"></i></a>
+
+            <br/> <br/>
+            An email with a confirmation link will be sent to <b>{{$ctrl.validUser}}</b>. The user may then
+            <b>confirm or decline</b> your project invitation.
+        </p>
+    </form>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody  data-ng-repeat="user in $ctrl.users">
+        <tr>
+            <td>
+                {{user.username}}
+            </td>
+            <td >
+                <a href="mailto:{{user.email}}">{{user.email}}</a>
+            </td>
+            <td >
+                <label data-ng-show="user.admin" class="label label-royal">Project Admin</label>
+                <label data-ng-hide="user.admin" class="label label-success">Project User</label>
+            </td>
+            <td>
+                <a class="clickable"  data-ng-click="$ctrl.selectUser(user)"
+                    data-toggle="modal" data-target="#editUserModal">
+                    <i class="fa fa-edit"></i></a>
+                <a class="clickable" data-ng-click="$ctrl.selectUser(user)"
+                    data-toggle="modal" data-target="#removeUserModal"
+                        ><i class="fa fa-times"></i></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>

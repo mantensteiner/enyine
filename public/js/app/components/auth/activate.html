@@ -1,0 +1,67 @@
+<div class="container">
+    <div class="row">
+
+        <br/>
+
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+
+
+
+            <div data-ng-show="$ctrl.passwordReset">
+                <h2 class="section-title no-margin-top"><i></i>Enter new Password.</h2>
+                <h5>Please enter a new password for your account.</h5>
+            </div>
+            <div data-ng-show="!$ctrl.passwordReset">
+                <h2 class="section-title no-margin-top"><i></i>Confirm your Account.</h2>
+                <h5>Please confirm your account before you start out!</h5>
+            </div>
+
+            <div class="panel panel-primary-dark animated fadeInDown">
+                <div class="panel-heading">Please fill in your data</div>
+                <div class="panel-body">
+
+                    <form name="signupForm" class="form account-form">
+
+                        <div class="form-group">
+                            <label for="signup-email" class="placeholder-hidden">Email Address</label>
+                            <input data-ng-disabled="true"  ng-model="$ctrl.user.email" type="email" class="form-control" id="signup-email"
+                                   placeholder="Your Email" tabindex="1" required
+                                   title="Email address">
+                        </div> <!-- /.form-group -->
+
+
+                        <div class="form-group">
+                            <label for="signup-username" class="placeholder-hidden">Username</label>
+                            <input data-ng-disabled="true" ng-model="$ctrl.user.username" type="text" class="form-control" id="signup-username" placeholder="Username" tabindex="3"
+                                   required>
+
+                        </div> <!-- /.form-group -->
+
+                        <div data-ng-show="$ctrl.passwordReset" class="form-group">
+                            <label for="login-password" class="placeholder-hidden">Password</label>
+                            <input ng-model="$ctrl.user.password" type="password" class="form-control" id="login-password" placeholder="Password" tabindex="4" required
+                                   data-placement="right" title="Password">
+                        </div> <!-- /.form-group -->
+
+
+                        <div class="form-group">
+                            <button data-ng-hide="$ctrl.passwordReset" ng-click="$ctrl.activate()" type="submit" class="btn btn-primary btn-block btn-lg" tabindex="6">
+                                Activate My Account &nbsp; <i class="fa fa-check"></i>
+                            </button>
+                            <button data-ng-show="$ctrl.passwordReset" ng-click="$ctrl.resetPassword()" data-ng-disabled="!$ctrl.signupForm.$valid"  type="submit"
+                                    class="btn btn-primary btn-block btn-lg" tabindex="6">
+                                Reset My Password &nbsp; <i class="fa fa-check"></i>
+                            </button>
+                        </div> <!-- /.form-group -->
+
+                    </form>
+                </div>
+            </div>
+            <p class="form-group">
+                <a ui-sref="auth.login"><i class="fa fa-angle-double-left"></i> &nbsp;Back to Login</a>
+            </p> <!-- /.form-group -->
+        </div>
+
+    </div>
+</div> <!-- container  -->
